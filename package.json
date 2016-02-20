@@ -1,0 +1,20 @@
+{
+  "name": "ef-video-tube",
+  "version": "1.0.0",
+  "private": true,
+  "description": "nodejs version of efVideoTube",
+  "author": "eriForce",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/eriforce/efvt.js.git"
+  },
+  "dependencies": {
+    "lodash": "^4.5.0",
+    "rethinkdbdash": "^2.2.18"
+  }
+}
