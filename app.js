@@ -1,11 +1,7 @@
 var koa = require("koa");
-var session = require("./session");
-
 var app = koa();
 
 app.keys = ["key"];
-
-app.use(session());
 
 app.use(function* () {
     switch (this.request.url) {
