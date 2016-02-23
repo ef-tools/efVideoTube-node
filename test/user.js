@@ -32,6 +32,7 @@ describe("Test user model", function () {
         yield user.save();
         var dbUser = yield User.findByUserName(name);
         assert(name, dbUser.userName);
+        assert(dbUser instanceof User);
     });
 
     it("should have a hashed password", function* () {

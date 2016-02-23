@@ -12,7 +12,6 @@ function* hashPassword(password) {
 };
 
 var User = function (properties) {
-    this.init();
     _.assign(this, properties);
     this.plainPassword = true;
 };
@@ -22,19 +21,9 @@ User.findByUserName = function* (userName) {
     var result = yield table.filter({ userName: userName });
     if (result && result.length) {
         user = result[0];
+        Object.setPrototypeOf(user, User.prototype);
     }
     return user;
-};
-
-User.prototype.init = function () {
-    Object.defineProperty(this, 'password', {
-        get: function () {
-            return this._password;
-        },
-        set: function (password) {
-            this._password = password;
-        }
-    });
 };
 
 User.prototype.hashPassword = function* () {
