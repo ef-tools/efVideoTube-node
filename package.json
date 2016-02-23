@@ -5,7 +5,7 @@
   "description": "nodejs version of efVideoTube",
   "author": "eriForce",
   "license": "MIT",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "prestart": "./node_modules/.bin/migrate",

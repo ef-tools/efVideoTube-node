@@ -9,8 +9,25 @@ describe("Test user model", function () {
     });
 
     it("should assign fields", function* () {
-        var name = "Erich";
-        var user = new User({ name: name });
-        assert.equal(user.name, name);
+        var name = "erich";
+        var user = new User({ userName: name });
+        assert.equal(user.userName, name);
     });
-})
+
+    it("should have id after being saved to db", function* () {
+        var name = "erich";
+        var password = "pwd";
+        var user = new User({ userName: name, password: password });
+        yield user.save();
+        assert(user.id);
+    });
+
+    it("should find a saved user by user name", function* () {
+        var name = "erich";
+        var password = "pwd";
+        var user = new User({ userName: name, password: password });
+        yield user.save();
+        var dbUser = yield User.findByUserName(name);
+        assert(dbUser.userName, name);
+    });
+});

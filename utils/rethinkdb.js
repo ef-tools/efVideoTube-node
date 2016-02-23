@@ -1,5 +1,5 @@
 var rethinkdb = require("rethinkdbdash");
-var config = require("../config.js");
+var config = require("../config");
 
 var r;
 
