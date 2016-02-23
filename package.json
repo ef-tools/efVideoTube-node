@@ -16,6 +16,7 @@
     "url": "https://bitbucket.org/eriforce/efvt.js.git"
   },
   "dependencies": {
+    "co-bcryptjs": "^0.2.0",
     "co-mocha": "^1.1.2",
     "koa": "^1.1.2",
     "lodash": "^4.5.0",
