@@ -9,7 +9,8 @@ describe("Test user model", function () {
     });
 
     it("should assign fields", function* () {
-        var user = new User({ name: "Erich" });
-        assert.equal(user.name, "Erich");
+        var name = "Erich";
+        var user = new User({ name: name });
+        assert.equal(user.name, name);
     });
 })
