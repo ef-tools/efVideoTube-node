@@ -1,11 +1,10 @@
 var _ = require("lodash");
-var r = require("../utils/rethinkdb")();
 var bcrypt = require("co-bcryptjs");
+var r = require("../utils/rethinkdb")();
 
-const TABLE_NAME = "users";
 const SCHEMA = ["userName", "password"];
 
-var table = r.table(TABLE_NAME);
+var table = r.table("users");
 
 function* hashPassword(password) {
     var salt = yield bcrypt.genSalt(8);
