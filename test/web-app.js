@@ -1,4 +1,4 @@
-// require("./user");
+require("./user");
 
 require("co-mocha");
 var assert = require("assert");

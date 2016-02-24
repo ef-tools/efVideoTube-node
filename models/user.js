@@ -6,9 +6,9 @@ const SCHEMA = ["userName", "password"];
 
 var table = r.table("users");
 
-function* hashPassword(password) {
+function* saltedHash(password) {
     var salt = yield bcrypt.genSalt(8);
-    yield bcrypt.hash(password, salt);
+    return yield bcrypt.hash(password, salt);
 };
 
 var User = function (properties) {
@@ -29,8 +29,15 @@ User.findByUserName = function* (userName) {
 User.prototype.hashPassword = function* () {
     if (this.plainPassword) {
         this.plainPassword = false;
-        this.password = yield hashPassword(this.password);
+        this.password = yield saltedHash(this.password);
     }
+};
+
+User.prototype.validate = function* (password) {
+    if (this.plainPassword)
+        return password === this.password;
+
+    return yield bcrypt.compare(password, this.password);
 };
 
 User.prototype.save = function* () {

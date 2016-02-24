@@ -1,3 +1,4 @@
 .vscode/
+.dt/
 node_modules/
 .migrate

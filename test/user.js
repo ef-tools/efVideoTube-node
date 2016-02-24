@@ -1,7 +1,7 @@
+require("co-mocha");
 var assert = require("assert");
 var User = require("../models/user");
 var r = require("../utils/rethinkdb")();
-require("co-mocha");
 
 describe("Test user model", function () {
     var name = "erich_test";
@@ -48,5 +48,13 @@ describe("Test user model", function () {
         yield user.save();
         var dbUser = yield User.findByUserName(name);
         assert(user.userName, dbUser.userName);
+    });
+
+    it("should be valid with correct pwd", function* () {
+        var password = "pwd";
+        var user = new User({ userName: name, password: password });
+        assert(yield user.validate(password));
+        yield user.save();
+        assert(yield user.validate(password));
     });
 });
