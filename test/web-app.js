@@ -21,8 +21,8 @@ describe("Test server routes", function () {
 
     describe("Test signing in", function () {
         var userName = "erich_test";
+        var password = "pwd";
         before(function* () {
-            var password = "pwd";
             var user = new User({ userName: userName, password: password });
             yield user.save();
         });
@@ -33,5 +33,14 @@ describe("Test server routes", function () {
         it("should get sign in page", function* () {
             yield agent.get("/signin").expect(200).end();
         });
+
+        it("should get token with correct credential", function* () {
+            yield agent.post("/signin").send({ userName: userName, password: password })
+                .expect(200).expect(function (res) {
+                    assert(res.body.token);
+                }).end();
+        });
+        
+        
     });
 });

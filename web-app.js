@@ -9,6 +9,10 @@ router.get("/signin", function* () {
     this.body = "sign in page";
 });
 
+router.post("/signin", function* () {
+    this.body = { token: "fake" };
+});
+
 app.use(router.routes())
     .use(router.allowedMethods());
 
