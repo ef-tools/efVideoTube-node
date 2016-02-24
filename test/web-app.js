@@ -15,10 +15,6 @@ describe("Test server routes", function () {
         yield agent.get("/").expect(200).end();
     });
 
-    it("should get 401 without logged in", function* () {
-        yield agent.get("/secure").expect(401).end();
-    });
-
     describe("Test signing in", function () {
         var userName = "erich_test";
         var password = "pwd";
@@ -30,20 +26,29 @@ describe("Test server routes", function () {
             yield r.table("users").filter({ userName: userName }).delete();
         });
 
-        it("should get sign in page", function* () {
+        it("should get /signin page", function* () {
             yield agent.get("/signin").expect(200).end();
         });
 
-        it("should get token with correct credential", function* () {
-            yield agent.post("/signin").send({ userName: userName, password: password })
-                .expect(200).expect(function (res) {
-                    assert(res.body.token);
-                }).end();
+        it("should get 401 on /index before signed in", function* () {
+            yield agent.get("/index").expect(401).end();
         });
 
         it("should get 401 with incorrect credential", function* () {
             yield agent.post("/signin").send({ userName: userName, password: "wrong" })
                 .expect(401).end();
+        });
+
+        it("should get token with correct credential", function* () {
+            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+                .expect(200).end();
+            assert(result.body.token);
+        });
+
+        it("should get access to /index with token", function* () {
+            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+                .expect(200).end();
+            yield agent.get("/index").set('Authorization', "Bearer " + result.body.token).expect(200).end();
         });
     });
 });
