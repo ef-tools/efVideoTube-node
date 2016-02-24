@@ -40,7 +40,10 @@ describe("Test server routes", function () {
                     assert(res.body.token);
                 }).end();
         });
-        
-        
+
+        it("should get 401 with incorrect credential", function* () {
+            yield agent.post("/signin").send({ userName: userName, password: "wrong" })
+                .expect(401).end();
+        });
     });
 });
