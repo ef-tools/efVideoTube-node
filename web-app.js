@@ -5,6 +5,10 @@ router.get("/", function* () {
     this.body = "home";
 });
 
+router.get("/signin", function* () {
+    this.body = "sign in page";
+});
+
 app.use(router.routes())
     .use(router.allowedMethods());
 
