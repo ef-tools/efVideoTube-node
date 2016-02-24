@@ -4,7 +4,7 @@ var r = require("../utils/rethinkdb")();
 require("co-mocha");
 
 describe("Test user model", function () {
-    var name = "erich";
+    var name = "erich_test";
     afterEach(function* () {
         yield r.table("users").filter({ userName: name }).delete();
     });
