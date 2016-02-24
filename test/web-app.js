@@ -7,8 +7,12 @@ require("co-mocha");
 var server = webApp.listen();
 var agent = request.agent(server);
 
-describe("Page tests", function () {
+describe("Test server pages", function () {
     it("should get homepage", function* () {
-        agent.get("/").expect(200).end();
+        yield agent.get("/").expect(200).end();
+    });
+
+    it("should get 401 without logged in", function* () {
+        yield agent.get("/secure").expect(401).end();
     });
 });
