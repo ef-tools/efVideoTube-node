@@ -1,13 +1,12 @@
 require("co-mocha");
 var assert = require("assert");
 var User = require("../models/user");
-var r = require("../utils/rethinkdb")();
 
 describe("Test user model", function () {
     var name = "erich_test";
     var password = "pwd";
-    afterEach(function* () {
-        yield r.table("users").filter({ userName: name }).delete();
+    after(function* () {
+        yield User.delete(name);
     });
 
     it("should create a user", function* () {

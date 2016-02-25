@@ -26,6 +26,10 @@ User.findByUserName = function* (userName) {
     return user;
 };
 
+User.delete = function* (userName) {
+    yield table.filter({ userName: userName }).delete();
+};
+
 User.prototype.hashPassword = function* () {
     if (this.plainPassword) {
         this.plainPassword = false;

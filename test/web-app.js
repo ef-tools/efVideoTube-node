@@ -5,7 +5,6 @@ var assert = require("assert");
 var request = require("co-supertest");
 var webApp = require("../web-app");
 var User = require("../models/user");
-var r = require("../utils/rethinkdb")();
 
 var server = webApp.listen();
 var agent = request.agent(server);
@@ -23,7 +22,7 @@ describe("Test server routes", function () {
             yield user.save();
         });
         after(function* () {
-            yield r.table("users").filter({ userName: userName }).delete();
+            yield User.delete(userName);
         });
 
         it("should get /signin page", function* () {
