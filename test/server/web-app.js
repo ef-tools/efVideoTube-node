@@ -1,10 +1,8 @@
-require("./user");
-
 require("co-mocha");
 var assert = require("assert");
 var request = require("co-supertest");
-var webApp = require("../web-app");
-var User = require("../models/user");
+var webApp = require("../../web-app");
+var User = require("../../models/user");
 
 var server = webApp.listen();
 var agent = request.agent(server);

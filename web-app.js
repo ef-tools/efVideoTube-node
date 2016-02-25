@@ -5,11 +5,8 @@ var publicRouter = require("./utils/public-router");
 
 app.use(auth());
 
-app.use(router.routes())
-    .use(router.allowedMethods());
-
-app.use(publicRouter.routes())
-    .use(publicRouter.allowedMethods());
+app.use(router.routes());
+app.use(publicRouter.routes());
 
 // catch all middleware, only land here
 // if no other routing rules match

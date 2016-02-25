@@ -1,6 +1,6 @@
 require("co-mocha");
 var assert = require("assert");
-var User = require("../models/user");
+var User = require("../../models/user");
 
 describe("Test user model", function () {
     var name = "erich_test";
