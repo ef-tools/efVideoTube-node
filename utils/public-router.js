@@ -2,9 +2,8 @@ var router = require("koa-router")();
 var parse = require("co-body");
 var jwt = require("jsonwebtoken");
 var _ = require("lodash");
-var User = require("./models/user");
-var checkAuth = require("./utils/check-auth");
-var config = require("./config");
+var User = require("../models/user");
+var config = require("../config");
 
 router.get("/", function* () {
     this.body = "home";
@@ -28,9 +27,5 @@ router.post("/signin", function* () {
     else
         this.throw(401, "Invalid user credentials.");
 });
-
-router.get("/index", checkAuth(), function* () {
-    this.body = "index";
-})
 
 module.exports = router;
