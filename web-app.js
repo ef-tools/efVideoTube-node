@@ -1,5 +1,8 @@
 var app = require("koa")();
+var auth = require("./utils/auth");
 var router = require("./router");
+
+app.use(auth());
 
 app.use(router.routes())
     .use(router.allowedMethods());

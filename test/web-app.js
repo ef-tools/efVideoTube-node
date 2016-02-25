@@ -49,5 +49,11 @@ describe("Test server routes", function () {
                 .expect(200).end();
             yield agent.get("/index").set('Authorization', "Bearer " + result.body.token).expect(200).end();
         });
+
+        it("should get 401 on /index with invalid scheme or token", function* () {
+            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+                .expect(200).end();
+            yield agent.get("/index").set('Authorization', "Basic " + result.body.token).expect(401).end();
+        });
     });
 });

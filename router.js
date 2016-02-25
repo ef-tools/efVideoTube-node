@@ -3,8 +3,8 @@ var parse = require("co-body");
 var jwt = require("jsonwebtoken");
 var _ = require("lodash");
 var User = require("./models/user");
-
-var secret = "efVideoTube";
+var checkAuth = require("./utils/check-auth");
+var config = require("./config");
 
 router.get("/", function* () {
     this.body = "home";
@@ -22,11 +22,15 @@ router.post("/signin", function* () {
             user: _.pick(user, ["id", "userName"])
         };
         this.body = {
-            token: jwt.sign(claim, secret)
+            token: jwt.sign(claim, config.secret)
         };
     }
     else
         this.throw(401, "Invalid user credentials.");
 });
+
+router.get("/index", checkAuth(), function* () {
+    this.body = "index";
+})
 
 module.exports = router;
