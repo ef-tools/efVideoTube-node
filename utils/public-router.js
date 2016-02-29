@@ -2,9 +2,8 @@ var router = require("koa-router")();
 var parse = require("co-body");
 var jwt = require("jsonwebtoken");
 var _ = require("lodash");
-var User = require("./models/user");
-
-var secret = "efVideoTube";
+var User = require("../models/user");
+var config = require("../config");
 
 router.get("/", function* () {
     this.body = "home";
@@ -22,7 +21,7 @@ router.post("/signin", function* () {
             user: _.pick(user, ["id", "userName"])
         };
         this.body = {
-            token: jwt.sign(claim, secret)
+            token: jwt.sign(claim, config.secret)
         };
     }
     else

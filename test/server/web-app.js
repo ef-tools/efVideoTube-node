@@ -1,10 +1,8 @@
-require("./user");
-
 require("co-mocha");
 var assert = require("assert");
 var request = require("co-supertest");
-var webApp = require("../web-app");
-var User = require("../models/user");
+var webApp = require("../../web-app");
+var User = require("../../models/user");
 
 var server = webApp.listen();
 var agent = request.agent(server);
@@ -48,6 +46,12 @@ describe("Test server routes", function () {
             var result = yield agent.post("/signin").send({ userName: userName, password: password })
                 .expect(200).end();
             yield agent.get("/index").set('Authorization', "Bearer " + result.body.token).expect(200).end();
+        });
+
+        it("should get 401 on /index with invalid scheme or token", function* () {
+            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+                .expect(200).end();
+            yield agent.get("/index").set('Authorization', "Basic " + result.body.token).expect(401).end();
         });
     });
 });
