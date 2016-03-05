@@ -1,11 +1,12 @@
+'use strict'
 require("co-mocha");
-var assert = require("assert");
-var request = require("co-supertest");
-var webApp = require("../../web-app");
-var User = require("../../models/user");
+let assert = require("assert");
+let request = require("co-supertest");
+let webApp = require("../../web-app");
+let User = require("../../models/user");
 
-var server = webApp.listen();
-var agent = request.agent(server);
+let server = webApp.listen();
+let agent = request.agent(server);
 
 describe("Test server routes", function () {
     it("should get homepage", function* () {
@@ -13,14 +14,16 @@ describe("Test server routes", function () {
     });
 
     describe("Test signing in", function () {
-        var userName = "erich_test";
-        var password = "pwd";
+        let userName = "erich_test";
+        let password = "pwd";
+        let user;
+        
         before(function* () {
-            var user = new User({ userName: userName, password: password });
+            user = new User({ userName: userName, password: password });
             yield user.save();
         });
         after(function* () {
-            yield User.delete(userName);
+            yield User.delete(user);
         });
 
         it("should get /signin page", function* () {
@@ -37,19 +40,19 @@ describe("Test server routes", function () {
         });
 
         it("should get token with correct credential", function* () {
-            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+            let result = yield agent.post("/signin").send({ userName: userName, password: password })
                 .expect(200).end();
             assert(result.body.token);
         });
 
         it("should get access to /index with token", function* () {
-            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+            let result = yield agent.post("/signin").send({ userName: userName, password: password })
                 .expect(200).end();
             yield agent.get("/index").set('Authorization', "Bearer " + result.body.token).expect(200).end();
         });
 
         it("should get 401 on /index with invalid scheme or token", function* () {
-            var result = yield agent.post("/signin").send({ userName: userName, password: password })
+            let result = yield agent.post("/signin").send({ userName: userName, password: password })
                 .expect(200).end();
             yield agent.get("/index").set('Authorization', "Basic " + result.body.token).expect(401).end();
         });

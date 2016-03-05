@@ -7,6 +7,10 @@ router.use(checkAuth());
 
 router.get("/index", function* () {
     this.body = "index";
-})
+});
+
+router.get("/settings", function* () {
+    this.body = "settings";
+});
 
 module.exports = router;
