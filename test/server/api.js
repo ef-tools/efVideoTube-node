@@ -8,9 +8,9 @@ let User = require("../../models/user");
 let agentFactory = require("../../utils/agent-factory");
 let constant = require("../../constant");
 
-describe("Test private APIs", function* () {
-    let user, agent, token;
 
+describe("Test private APIs", function () {
+    let user, agent, token;
     before(function* () {
         let userName = "erich_test";
         let password = "pwdpwd";
@@ -19,8 +19,8 @@ describe("Test private APIs", function* () {
 
         let server = webApp.listen();
         agent = agentFactory(server);
-        token = yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
-            .expect(200).end().body.token;
+        token = (yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
+            .expect(200).end()).body.token;
     });
     after(function* () {
         yield User.delete(user.userName);
@@ -33,7 +33,7 @@ describe("Test private APIs", function* () {
 
         it("should get settings with token", function* () {
             agent.headers["Authorization"] = util.format("Bearer %s", token);
-            let body = yield agent.get(constant.urls.settings).expect(200).end().body;
+            let body = (yield agent.get(constant.urls.settings).expect(200).end()).body;
             assert(body);
         });
     });
