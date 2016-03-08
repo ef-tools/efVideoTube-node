@@ -11,6 +11,7 @@ let config = {
     media: new Map()
 };
 
+// first player will be set as the default
 config.media.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
 config.media.set(".webm", [constant.players.h5video]);
 config.media.set(".wmv", [constant.players.silverlight]);

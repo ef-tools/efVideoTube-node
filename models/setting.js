@@ -2,13 +2,14 @@
 let _ = require("lodash");
 let r = require("../utils/rethinkdb")();
 let config = require("../config");
+let constant = require("../constant");
 
 const SCHEMA = ["userName", "media"];
 
 let table = r.table("settings");
 
-let Setting = function (properties) {
-   _.assign(this, properties);
+let Setting = function(properties) {
+    _.assign(this, properties);
 };
 
 Setting.findByUserName = function* (userName) {
@@ -26,8 +27,13 @@ Setting.deleteByUserName = function* (userName) {
 };
 
 Setting.prototype.save = function* () {
+    this.media = _.pick(this.media, Array.from(config.media.keys()));
+    for (let ext of Object.keys(this.media)) {
+        if (this.media[ext] !== constant.players.none && !_.includes(config.media.get(ext), this.media[ext]))
+            delete this.media[ext];
+    }
+
     let model = _.pick(this, SCHEMA);
-    _.pick(model.media, Array.from(config.media.keys()));
     let result;
     if (this.id) {
         result = yield table.get(this.id).update(model);
