@@ -1,10 +1,22 @@
 'use strict'
 let _ = require("lodash");
 let r = require("../utils/rethinkdb")();
+let config = require("../config");
 
-const SCHEMA = ["userName"];
+const SCHEMA = ["userName", "media"];
 
 let table = r.table("settings");
+
+const defaultPlayerSetting = (function () {
+    let media = {};
+    config.media.forEach((players, type) => {
+        media[type] = {
+            "active": null,
+            "player": players
+        };
+    })
+    return { "media": media };
+})();
 
 let Setting = function (properties) {
    _.assign(this, properties);
@@ -18,6 +30,19 @@ Setting.findByUserName = function* (userName) {
         Object.setPrototypeOf(setting, Setting.prototype);
     }
     return setting;
+};
+
+Setting.getPlayerSettingByDbSetting = function* (dbSetting) {
+    let playerSetting =  Object.assign({}, defaultPlayerSetting);
+    if (dbSetting != null && dbSetting.media != null) {
+        Object.keys(dbSetting.media).forEach((key) => {
+            let activePlayer = dbSetting.media[key];
+            playerSetting["media"][key]["active"] = activePlayer;
+            playerSetting["media"][key]["player"]
+                .splice(playerSetting["media"][key]["player"].indexOf(activePlayer), 1);
+        });
+    }
+    return playerSetting;
 };
 
 Setting.deleteByUserName = function* (userName) {
