@@ -19,7 +19,7 @@ let User = function (properties) {
 
 User.findByUserName = function* (userName) {
     let user;
-    let result = yield table.filter({ userName: userName });
+    let result = yield table.getAll(userName, { index: "userName" });
     if (result && result.length) {
         user = result[0];
         Object.setPrototypeOf(user, User.prototype);
@@ -33,7 +33,7 @@ User.delete = function* (user) {
 };
 
 User.deleteByUserName = function* (userName) {
-    yield table.filter({ userName: userName }).delete();
+    yield table.getAll(userName, { index: "userName" }).delete();
 };
 
 User.prototype.hashPassword = function* () {

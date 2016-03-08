@@ -2,15 +2,15 @@
 require("co-mocha");
 let assert = require("assert");
 let util = require("util");
-let request = require("co-supertest");
 let webApp = require("../../web-app");
 let User = require("../../models/user");
 let agentFactory = require("../../utils/agent-factory");
+let config = require("../../config");
 let constant = require("../../constant");
 
+describe("Test private APIs", function() {
+    let user, agent;
 
-describe("Test private APIs", function () {
-    let user, agent, token;
     before(function* () {
         let userName = "erich_test";
         let password = "pwdpwd";
@@ -19,30 +19,46 @@ describe("Test private APIs", function () {
 
         let server = webApp.listen();
         agent = agentFactory(server);
-        token = (yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
-            .expect(200).end()).body.token;
+        let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
+        agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);
     });
     after(function* () {
         yield User.delete(user.userName);
     });
 
-    describe("Test /settings api", function () {
+    describe("Test /settings api", function() {
         it("should get 401 without token", function* () {
-            yield agent.get(constant.urls.settings).expect(401).end();
+            yield agentFactory(server).get(constant.urls.settings).expect(401).end();
         });
 
-        it("should get settings with token", function* () {
-            agent.headers["Authorization"] = util.format("Bearer %s", token);
-            var rep = yield agent.get(constant.urls.settings).end();
-            assert(rep.body.media[".mp4"], null);
+        it("should get default settings with token", function* () {
+            let result = yield agent.get(constant.urls.settings).expect(200).end();
+            let media = result.body.media;
+            assert(media);
+            assert.deepEqual(Object.keys(media), Array.from(config.media));
+            for (let ext of Object.keys(media)) {
+                assert(media[ext]);
+            }
         });
-        
-        it("should get settings with token after save setting", function* () {
-            agent.headers["Authorization"] = util.format("Bearer %s", token);
-            yield agent.post(constant.urls.settings)
-                .send({ media: { ".mp4": "h5video" } }).expect(200).end();
-            var rep = yield agent.get(constant.urls.settings).expect(200).end();
-            assert(rep.body.media[".mp4"], "h5video");
+
+        it("should save settings", function* () {
+            let settings = {
+                media: {
+                    ".mp4": constant.players.h5video,
+                    ".m4a": constant.players.none
+                }
+            };
+            yield agent.post(constant.urls.settings).send(settings).expect(200).end();
+            let result = yield agent.get(constant.urls.settings).expect(200).end();
+            let media = result.body.media;
+            assert(media);
+            assert.deepEqual(Object.keys(media), Array.from(config.media));
+            for (let ext of Object.keys(media)) {
+                if (ext in settings.media)
+                    assert.equal(media[ext], settings.media[ext]);
+                else
+                    assert(media[ext]);
+            }
         });
     });
 });
