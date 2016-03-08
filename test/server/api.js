@@ -9,6 +9,7 @@ let config = require("../../config");
 let constant = require("../../constant");
 
 describe("Test private APIs", function() {
+    let server = webApp.listen();
     let user, agent;
 
     before(function* () {
@@ -17,7 +18,6 @@ describe("Test private APIs", function() {
         user = new User({ userName: userName, password: password });
         yield user.save();
 
-        let server = webApp.listen();
         agent = agentFactory(server);
         let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
         agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);

@@ -13,7 +13,7 @@ let Setting = function(properties) {
 };
 
 Setting.findByUserName = function* (userName) {
-    let setting;
+    let setting = null;
     let result = yield table.getAll(userName, { index: "userName" });
     if (result && result.length) {
         setting = result[0];
@@ -33,15 +33,17 @@ Setting.prototype.save = function* () {
             delete this.media[ext];
     }
 
-    let model = _.pick(this, SCHEMA);
-    let result;
-    if (this.id) {
-        result = yield table.get(this.id).update(model);
-    }
-    else {
-        result = yield table.insert(model);
-        if (result && result.inserted) {
-            this.id = result.generated_keys[0];
+    if (Object.keys(this.media).length) {
+        let model = _.pick(this, SCHEMA);
+        let result;
+        if (this.id) {
+            result = yield table.get(this.id).update(model);
+        }
+        else {
+            result = yield table.insert(model);
+            if (result && result.inserted) {
+                this.id = result.generated_keys[0];
+            }
         }
     }
 };

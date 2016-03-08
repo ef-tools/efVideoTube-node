@@ -40,7 +40,7 @@ describe("Test user model", function() {
         yield user.save();
         yield User.deleteByUserName(userName);
         let dbUser = yield User.findByUserName(userName);
-        assert.equal(typeof dbUser, "undefined");
+        assert.equal(dbUser, null);
     });
 
     it("should have a hashed password", function* () {

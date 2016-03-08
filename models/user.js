@@ -18,7 +18,7 @@ let User = function (properties) {
 };
 
 User.findByUserName = function* (userName) {
-    let user;
+    let user = null;
     let result = yield table.getAll(userName, { index: "userName" });
     if (result && result.length) {
         user = result[0];
