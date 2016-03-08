@@ -33,9 +33,16 @@ describe("Test private APIs", function () {
 
         it("should get settings with token", function* () {
             agent.headers["Authorization"] = util.format("Bearer %s", token);
-            let body = (yield agent.get(constant.urls.settings).expect(200).end()).body;
-            assert(body);
+            var rep = yield agent.get(constant.urls.settings).end();
+            assert(rep.body.media[".mp4"], null);
+        });
+        
+        it("should get settings with token after save setting", function* () {
+            agent.headers["Authorization"] = util.format("Bearer %s", token);
+            yield agent.post(constant.urls.settings)
+                .send({ media: { ".mp4": "h5video" } }).expect(200).end();
+            var rep = yield agent.get(constant.urls.settings).expect(200).end();
+            assert(rep.body.media[".mp4"], "h5video");
         });
     });
-
 });
