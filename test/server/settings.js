@@ -35,7 +35,7 @@ describe("Test /settings api", function () {
         let result = yield agent.get(constant.urls.settings).expect(200).end();
         let media = result.body.media;
         assert(media);
-        assert.deepStrictEqual(Object.keys(media), Array.from(config.media));
+        assert.deepStrictEqual(Object.keys(media), Array.from(config.media.keys()));
         for (let ext of Object.keys(media)) {
             assert.equal(media[ext].active, config.media.get(ext)[0]);
             assert.deepStrictEqual(media[ext].players, config.media.get(ext));
@@ -57,7 +57,7 @@ describe("Test /settings api", function () {
         let result = yield agent.get(constant.urls.settings).expect(200).end();
         let media = result.body.media;
         assert(media);
-        assert.deepStrictEqual(Object.keys(media), Array.from(config.media));
+        assert.deepStrictEqual(Object.keys(media), Array.from(config.media.keys()));
         for (let ext of Object.keys(media)) {
             assert.equal(media[ext].active, ext in validSettings.media ? validSettings.media[ext] : config.media.get(ext)[0]);
             assert.deepStrictEqual(media[ext].players, config.media.get(ext));
