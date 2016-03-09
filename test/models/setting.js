@@ -35,7 +35,7 @@ describe("Test setting model", function() {
         let dbSetting = yield Setting.findByUserName(userName);
         assert(dbSetting instanceof Setting);
         assert.equal(dbSetting.userName, userName);
-        assert.deepEqual(dbSetting.media, customMedia);
+        assert.deepStrictEqual(dbSetting.media, customMedia);
     });
 
     it("should not save with empty media", function* () {
@@ -65,7 +65,7 @@ describe("Test setting model", function() {
         assert(".wmv" in setting.media);
 
         let dbSetting = yield Setting.findByUserName(userName);
-        assert.deepEqual(dbSetting, setting);
+        assert.deepStrictEqual(dbSetting, setting);
     });
 
     it("should filter extensions with invalid players", function* () {
@@ -81,7 +81,7 @@ describe("Test setting model", function() {
         assert(".mp4" in setting.media);
 
         let dbSetting = yield Setting.findByUserName(userName);
-        assert.deepEqual(dbSetting, setting);
+        assert.deepStrictEqual(dbSetting, setting);
     });
 
     it("should delete a setting", function* () {
