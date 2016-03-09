@@ -1,4 +1,5 @@
 require("./models/user");
 require("./models/setting");
 require("./server/web-app");
-require("./server/api");
+require("./server/settings");
+require("./server/index");

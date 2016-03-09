@@ -73,7 +73,8 @@ describe("Test setting model", function() {
             userName: userName,
             media: {
                 ".mp4": constant.players.none,
-                ".wmv": "whatever invalid"
+                ".wmv": "whatever invalid",
+                ".flv": constant.players.h5video
             }
         });
         yield setting.save();
