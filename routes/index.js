@@ -1,9 +1,7 @@
 'use strict'
 
 module.exports = {
-    get: function () {
-        return function* () {
-            this.body = "index";
-        };
+    get: function* () {
+        this.body = "index";
     }
 };

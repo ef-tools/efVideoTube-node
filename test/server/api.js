@@ -2,6 +2,7 @@
 require("co-mocha");
 let assert = require("assert");
 let util = require("util");
+let _ = require("lodash");
 let webApp = require("../../web-app");
 let User = require("../../models/user");
 let agentFactory = require("../../utils/agent-factory");
