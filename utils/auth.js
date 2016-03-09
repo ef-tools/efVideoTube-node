@@ -9,7 +9,7 @@ module.exports = function* (next) {
         if (parts.length === 2 && parts[0] === "Bearer") {
             let token = parts[1];
             try {
-                this.user = jwt.verify(token, config.secret);
+                this.claims = jwt.verify(token, config.secret);
             } catch (err) { }
         }
     }

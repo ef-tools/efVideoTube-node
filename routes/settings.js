@@ -4,14 +4,14 @@ let Setting = require("../models/setting");
 
 module.exports = {
     get: function* () {
-        let setting = yield Setting.findByUserName(this.user.user.userName);
+        let setting = yield Setting.findByUserName(this.claims.userName);
         this.body = yield Setting.getPlayerSettingByDbSetting(setting);
     },
     post: function* () {
         let body = yield parse(this);
-        let setting = yield Setting.findByUserName(this.user.user.userName);
+        let setting = yield Setting.findByUserName(this.claims.userName);
         if (setting == null) {
-            setting = new Setting({ userName: this.user.user.userName });
+            setting = new Setting({ userName: this.claims.userName });
         }
         setting.media = body.media;
         yield setting.save();

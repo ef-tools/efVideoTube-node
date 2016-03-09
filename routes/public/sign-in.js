@@ -13,11 +13,9 @@ module.exports = {
         let body = yield parse(this);
         let user = yield User.findByUserName(body.userName);
         if (user && (yield user.validate(body.password))) {
-            let claim = {
-                user: _.pick(user, ["id", "userName"])
-            };
+            let claims = _.pick(user, ["id", "userName"]);
             this.body = {
-                token: jwt.sign(claim, config.secret)
+                token: jwt.sign(claims, config.secret)
             };
         }
         else
