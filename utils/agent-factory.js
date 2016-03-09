@@ -1,8 +1,9 @@
-var request = require("co-supertest");
+'use strict'
+let request = require("co-supertest");
 
 module.exports = function (server) {
-    var agent = request.agent(server);
-    var headers = {};
+    let agent = request.agent(server);
+    let headers = {};
 
     return {
         headers: headers,

@@ -2,12 +2,13 @@
 let constant = require("./constant");
 
 let config = {
+    port: 3000,
+    secret: "efVideoTube",
     rethinkdb: {
         host: "localhost",
         port: 28015,
         db: "efvt"
     },
-    secret: "efVideoTube",
     media: new Map()
 };
 

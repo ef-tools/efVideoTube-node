@@ -8,7 +8,7 @@ let agentFactory = require("../../utils/agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
 
-describe("Test private APIs", function() {
+describe("Test private APIs", function () {
     let server = webApp.listen();
     let user, agent;
 
@@ -26,7 +26,7 @@ describe("Test private APIs", function() {
         yield User.delete(user.userName);
     });
 
-    describe("Test /settings api", function() {
+    describe("Test /settings api", function () {
         it("should get 401 without token", function* () {
             yield agentFactory(server).get(constant.urls.settings).expect(401).end();
         });
@@ -37,7 +37,8 @@ describe("Test private APIs", function() {
             assert(media);
             assert.deepEqual(Object.keys(media), Array.from(config.media));
             for (let ext of Object.keys(media)) {
-                assert.equal(media[ext], config.media.get(ext)[0]);
+                assert.equal(media[ext].active, config.media.get(ext)[0]);
+                assert.deepEqual(media[ext].players, config.media.get(ext));
             }
         });
 
@@ -58,10 +59,8 @@ describe("Test private APIs", function() {
             assert(media);
             assert.deepEqual(Object.keys(media), Array.from(config.media));
             for (let ext of Object.keys(media)) {
-                if (ext in validSettings.media)
-                    assert.equal(media[ext], validSettings.media[ext]);
-                else
-                    assert.equal(media[ext], config.media.get(ext)[0]);
+                assert.equal(media[ext].active, ext in validSettings.media ? validSettings.media[ext] : config.media.get(ext)[0]);
+                assert.deepEqual(media[ext].players, config.media.get(ext));
             }
         });
     });

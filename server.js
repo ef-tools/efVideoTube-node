@@ -1,3 +1,5 @@
-var app = require("./web-app");
+'use strict'
+let app = require("./web-app");
+let config = require("./config");
 
-var server = app.listen(3000);
+let server = app.listen(config.port);
