@@ -1,11 +1,27 @@
 'use strict'
 let parse = require("co-body");
 let Setting = require("../models/setting");
+let config = require("../config");
+
+var generateMediaWebModel = function (setting) {
+    let defaultMedia = { media: {} };
+    for (let ext of Array.from(config.media.keys())) {
+        defaultMedia.media[ext] = {};
+        defaultMedia.media[ext].players = config.media.get(ext);
+        if (setting && setting.media[ext]) {
+            defaultMedia.media[ext].active = setting.media[ext];
+        }
+        else {
+            defaultMedia.media[ext].active = defaultMedia.media[ext].players[0];
+        }
+    }
+    return defaultMedia;
+};
 
 module.exports = {
     get: function* () {
         let setting = yield Setting.findByUserName(this.claims.userName);
-        this.body = yield Setting.getPlayerSettingByDbSetting(setting);
+        this.body = generateMediaWebModel(setting);
     },
     post: function* () {
         let body = yield parse(this);
