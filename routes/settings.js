@@ -9,27 +9,22 @@ module.exports = {
     get: function* () {
         let setting = yield Setting.findByUserName(this.claims.userName);
         let media = {};
-        for (let ext in config.media.keys()) {
-            let players = config.media.get(ext);
+        config.media.forEach((players, ext) => {
             let isValid = setting && (setting.media[ext] === constant.players.none || _.includes(players, setting.media[ext]));
             media[ext] = {
                 active: isValid ? setting.media[ext] : players[0],
                 players: players
             }
-        }
-        return { media: media };
+        });
+        this.body = { media: media };
     },
     post: function* () {
         let body = yield parse(this);
         let setting = yield Setting.findByUserName(this.claims.userName);
-        if (setting == null) {
+        if (setting === null)
             setting = new Setting({ userName: this.claims.userName });
-        }
         setting.media = body.media;
         yield setting.save();
-        if (setting.id == undefined) {
-            this.throw(500, "save failed.");
-        };
-        this.body = setting.id;
+        this.status = 200;
     }
 };
