@@ -8,7 +8,7 @@ const SCHEMA = ["userName", "media"];
 
 let table = r.table("settings");
 
-let Setting = function(properties) {
+let Setting = function (properties) {
     _.assign(this, properties);
 };
 
@@ -29,7 +29,7 @@ Setting.deleteByUserName = function* (userName) {
 Setting.prototype.save = function* () {
     this.media = _.pick(this.media, Array.from(config.media.keys()));
     for (let ext of Object.keys(this.media)) {
-        if (this.media[ext] !== constant.players.none && !_.includes(config.media.get(ext), this.media[ext]))
+        if (!_.includes(config.media.get(ext), this.media[ext]))
             delete this.media[ext];
     }
 

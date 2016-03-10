@@ -20,4 +20,8 @@ config.media.set(".flv", [constant.players.flash]);
 config.media.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
 config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
 
+config.media.forEach((players) => {
+    players.push(constant.players.none);
+});
+
 module.exports = config;

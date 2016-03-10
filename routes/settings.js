@@ -10,11 +10,11 @@ module.exports = {
         let setting = yield Setting.findByUserName(this.claims.userName);
         let media = {};
         config.media.forEach((players, ext) => {
-            let isValid = setting && (setting.media[ext] === constant.players.none || _.includes(players, setting.media[ext]));
+            let isValid = setting && _.includes(players, setting.media[ext]);
             media[ext] = {
                 active: isValid ? setting.media[ext] : players[0],
                 players: players
-            }
+            };
         });
         this.body = { media: media };
     },
