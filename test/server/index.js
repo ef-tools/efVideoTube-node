@@ -2,6 +2,7 @@
 require("co-mocha");
 let assert = require("assert");
 let util = require("util");
+let path = require('path');
 let _ = require("lodash");
 let mockFs = require('mock-fs');
 let webApp = require("../../web-app");
@@ -51,16 +52,20 @@ describe("Test /index api", function () {
         mock.fs["?name"] = mock.fs["?path"] = "";
         for (let i = 0; i < nodes.length; i++) {
             let fs = nodes[i];
-            let dirs = Object.keys(fs).filter(f=> typeof fs[f] !== "string")
-            let files = Object.keys(fs).filter(f=> typeof fs[f] === "string")
+            let dirNames = Object.keys(fs).filter(f => typeof fs[f] !== "string")
+            let fileNames = Object.keys(fs).filter(f => typeof fs[f] === "string")
 
             let result = yield agent.get(constant.urls.index).query("path", fs["?path"]).expect(200).end();
             assert.equalCaseInsensitive(result.body.name, fs["?name"]);
             assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-            assert.deepStrictEqual(result.body.dirs, dirs);
-            assert.deepStrictEqual(result.body.files, files);
+            assert.deepStrictEqual(result.body.dirs, dirNames);
+            assert.deepStrictEqual(result.body.files, fileNames);
 
-            dirs.forEach(d => nodes.push(fs[d]));
+            dirNames.forEach(d => {
+                fs[d]["?name"] = d;
+                fs[d]["?path"]=path.join(fs["?path"], d);
+                nodes.push(fs[d]);
+            });
         }
     });
 });
