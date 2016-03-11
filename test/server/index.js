@@ -11,6 +11,10 @@ let config = require("../../config");
 let constant = require("../../constant");
 let mock = require("../mock");
 
+assert.equalCaseInsensitive = function (actual, expect) {
+    assert.equal(actual.toUpperCase(), expect.toUpperCase());
+};
+
 describe("Test /index api", function () {
     let server = webApp.listen();
     let user, agent;
@@ -36,5 +40,27 @@ describe("Test /index api", function () {
         yield agentFactory(server).get(constant.urls.index).expect(401).end();
     });
 
+    it("should get root structure by default", function* () {
+        let resultRoot = yield agent.get(constant.urls.index).query("path", "").expect(200).end();
+        let resultDefault = yield agent.get(constant.urls.index).expect(200).end();
+        assert.deepStrictEqual(resultDefault.body, resultRoot.body);
+    });
 
+    it("should get file system structure", function* () {
+        let nodes = [mock.fs];
+        mock.fs["?name"] = mock.fs["?path"] = "";
+        for (let i = 0; i < nodes.length; i++) {
+            let fs = nodes[i];
+            let dirs = Object.keys(fs).filter(f=> typeof fs[f] !== "string")
+            let files = Object.keys(fs).filter(f=> typeof fs[f] === "string")
+
+            let result = yield agent.get(constant.urls.index).query("path", fs["?path"]).expect(200).end();
+            assert.equalCaseInsensitive(result.body.name, fs["?name"]);
+            assert.equalCaseInsensitive(result.body.path, fs["?path"]);
+            assert.deepStrictEqual(result.body.dirs, dirs);
+            assert.deepStrictEqual(result.body.files, files);
+
+            dirs.forEach(d => nodes.push(fs[d]));
+        }
+    });
 });
