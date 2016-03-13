@@ -5,6 +5,7 @@ let util = require("util");
 let _ = require("lodash");
 let webApp = require("../../web-app");
 let User = require("../../models/user");
+let Setting = require("../../models/setting");
 let agentFactory = require("../../utils/agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
@@ -24,7 +25,8 @@ describe("Test /settings api", function () {
         agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);
     });
     after(function* () {
-        yield User.delete(user.userName);
+        yield User.deleteByUserName(user.userName);
+        yield Setting.deleteByUserName(user.userName);
     });
 
     it("should get 401 without token", function* () {

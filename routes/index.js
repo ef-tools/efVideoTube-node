@@ -5,6 +5,7 @@ let _ = require("lodash");
 let bluebird = require("bluebird");
 let Setting = require("../models/setting");
 let config = require("../config");
+let constant = require("../constant");
 
 bluebird.promisifyAll(fs);
 
@@ -24,7 +25,8 @@ module.exports = {
         };
         for (let i of itemNames) {
             let isDir = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory();
-            if (isDir || _.includes(Object.keys(setting.media), Path.extname(i))) {
+            let ext = Path.extname(i);
+            if (isDir || (_.includes(Object.keys(setting.media), ext) && setting.media[ext] !== constant.players.none)) {
                 let collection = isDir ? webModel.dirs : webModel.files;
                 collection.push({
                     name: i,

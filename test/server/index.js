@@ -33,7 +33,7 @@ describe("Test /index api", function () {
         mockFs(mock.fs);
     });
     after(function* () {
-        yield User.delete(user.userName);
+        yield User.deleteByUserName(user.userName);
         mockFs.restore();
     });
 
