@@ -7,6 +7,7 @@ let _ = require("lodash");
 let mockFs = require('mock-fs');
 let webApp = require("../../web-app");
 let User = require("../../models/user");
+let Setting = require("../../models/setting");
 let agentFactory = require("../../utils/agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
@@ -47,11 +48,9 @@ describe("Test /index api", function () {
         assert.deepStrictEqual(resultDefault.body, resultRoot.body);
     });
 
-    it("should get file system structure", function* () {
-        let result = yield agent.get(constant.urls.settings).expect(200).end();
-        let media = result.body.media;
-        let exts = Object.keys(media).filter(ext => media[ext].active !== constant.players.none);
-
+    describe("Test file system structure", function () {
+        let setting = Setting.injectDefaults();
+        let exts = Object.keys(setting.media).filter(ext => setting.media[ext] !== constant.players.none);
         let nodes = [mock.fs.Media];
         nodes[0]["?name"] = nodes[0]["?path"] = "";
         for (let i = 0; i < nodes.length; i++) {
@@ -60,28 +59,31 @@ describe("Test /index api", function () {
             items.sort();
             let dirNames = items.filter(i => typeof fs[i] !== "string");
             let fileNames = items.filter(i => typeof fs[i] === "string" && _.includes(exts, Path.extname(i)) && !i.startsWith("?"));
-
-            result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
-            assert.equalCaseInsensitive(result.body.name, fs["?name"]);
-            assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-            assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
-                return {
-                    name: d,
-                    path: Path.join(fs["?path"], d)
-                };
-            }));
-            assert.deepStrictEqual(result.body.files, fileNames.map(f => {
-                return {
-                    name: f,
-                    path: Path.join(fs["?path"], f)
-                };
-            }));
-
             dirNames.forEach(d => {
                 fs[d]["?name"] = d;
                 fs[d]["?path"] = Path.join(fs["?path"], d);
                 nodes.push(fs[d]);
             });
+
+            (function (fs, dirNames, fileNames) {
+                it(util.format("should get %s", fs["?path"] || "ROOT"), function* () {
+                    let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
+                    assert.equalCaseInsensitive(result.body.name, fs["?name"]);
+                    assert.equalCaseInsensitive(result.body.path, fs["?path"]);
+                    assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
+                        return {
+                            name: d,
+                            path: Path.join(fs["?path"], d)
+                        };
+                    }));
+                    assert.deepStrictEqual(result.body.files, fileNames.map(f => {
+                        return {
+                            name: f,
+                            path: Path.join(fs["?path"], f)
+                        };
+                    }));
+                });
+            })(fs, dirNames, fileNames);
         }
     });
 });
