@@ -36,26 +36,23 @@ describe("Test server routes", function () {
         });
 
         it("should get 401 with incorrect credential", function* () {
-            yield agent.post(constant.urls.signin).send({ userName: userName, password: "wrong" })
-                .expect(401).end();
+            yield agent.post(constant.urls.signin).send({ userName: userName, password: "wrong" }).expect(401).end();
         });
 
         it("should get token with correct credential", function* () {
-            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
-                .expect(200).end();
+            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end();
             assert(result.body.token);
         });
 
         it("should get access to /settings with token", function* () {
-            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
-                .expect(200).end();
+            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end();
             yield agent.get(constant.urls.settings).set("Authorization", "Bearer " + result.body.token).expect(200).end();
         });
 
         it("should get 401 on /settings with invalid scheme or token", function* () {
-            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password })
-                .expect(200).end();
+            let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end();
             yield agent.get(constant.urls.settings).set("Authorization", "Basic " + result.body.token).expect(401).end();
+            yield agent.get(constant.urls.settings).set("Authorization", "Bearer " + result.body.token + "wrong").expect(401).end();
         });
     });
 });
