@@ -1,4 +1,5 @@
 'use strict'
+let Path = require('path');
 let constant = require("./constant");
 
 let config = {
@@ -9,7 +10,8 @@ let config = {
         port: 28015,
         db: "efvt"
     },
-    media: new Map()
+    media: new Map(),
+    mediaPath: Path.join(__dirname, "Media")
 };
 
 // first player will be set as the default
@@ -19,7 +21,6 @@ config.media.set(".wmv", [constant.players.silverlight]);
 config.media.set(".flv", [constant.players.flash]);
 config.media.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
 config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
-
 config.media.forEach((players) => {
     players.push(constant.players.none);
 });

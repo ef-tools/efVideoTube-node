@@ -12,8 +12,8 @@ let config = require("../../config");
 let constant = require("../../constant");
 let mock = require("../mock");
 
-assert.equalCaseInsensitive = function (actual, expect) {
-    assert.equal(actual.toUpperCase(), expect.toUpperCase());
+assert.equalCaseInsensitive = function (actual, expected) {
+    assert.equal(actual.toUpperCase(), expected.toUpperCase());
 };
 
 describe("Test /index api", function () {
