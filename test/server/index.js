@@ -2,7 +2,7 @@
 require("co-mocha");
 let assert = require("assert");
 let util = require("util");
-let path = require("path");
+let Path = require("path");
 let _ = require("lodash");
 let mockFs = require('mock-fs');
 let webApp = require("../../web-app");
@@ -60,12 +60,22 @@ describe("Test /index api", function () {
             let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
             assert.equalCaseInsensitive(result.body.name, fs["?name"]);
             assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-            assert.deepStrictEqual(result.body.dirs.map(d => d.name), dirNames);
-            assert.deepStrictEqual(result.body.files.map(d => d.name), fileNames);
+            assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
+                return {
+                    name: d,
+                    path: Path.join(fs["?path"], d)
+                };
+            }));
+            assert.deepStrictEqual(result.body.files, fileNames.map(f => {
+                return {
+                    name: f,
+                    path: Path.join(fs["?path"], f)
+                };
+            }));
 
             dirNames.forEach(d => {
                 fs[d]["?name"] = d;
-                fs[d]["?path"] = path.join(fs["?path"], d);
+                fs[d]["?path"] = Path.join(fs["?path"], d);
                 nodes.push(fs[d]);
             });
         }
