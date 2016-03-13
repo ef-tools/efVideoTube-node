@@ -48,7 +48,7 @@ describe("Test /index api", function () {
         assert.deepStrictEqual(resultDefault.body, resultRoot.body);
     });
 
-    describe("Test file system structure", function () {
+    describe("Test index structure", function () {
         let setting = Setting.injectDefaults();
         let exts = Object.keys(setting.media).filter(ext => setting.media[ext] !== constant.players.none);
         let nodes = [mock.fs.Media];
@@ -65,25 +65,23 @@ describe("Test /index api", function () {
                 nodes.push(fs[d]);
             });
 
-            (function (fs, dirNames, fileNames) {
-                it(util.format("should get %s", fs["?path"] || "ROOT"), function* () {
-                    let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
-                    assert.equalCaseInsensitive(result.body.name, fs["?name"]);
-                    assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-                    assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
-                        return {
-                            name: d,
-                            path: Path.join(fs["?path"], d)
-                        };
-                    }));
-                    assert.deepStrictEqual(result.body.files, fileNames.map(f => {
-                        return {
-                            name: f,
-                            path: Path.join(fs["?path"], f)
-                        };
-                    }));
-                });
-            })(fs, dirNames, fileNames);
+            it(util.format("should get index of %s", fs["?path"] || "ROOT"), function* () {
+                let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
+                assert.equalCaseInsensitive(result.body.name, fs["?name"]);
+                assert.equalCaseInsensitive(result.body.path, fs["?path"]);
+                assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
+                    return {
+                        name: d,
+                        path: Path.join(fs["?path"], d)
+                    };
+                }));
+                assert.deepStrictEqual(result.body.files, fileNames.map(f => {
+                    return {
+                        name: f,
+                        path: Path.join(fs["?path"], f)
+                    };
+                }));
+            });
         }
     });
 });
