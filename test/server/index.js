@@ -2,7 +2,7 @@
 require("co-mocha");
 let assert = require("assert");
 let util = require("util");
-let path = require('path');
+let path = require("path");
 let _ = require("lodash");
 let mockFs = require('mock-fs');
 let webApp = require("../../web-app");

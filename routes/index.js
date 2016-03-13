@@ -1,6 +1,6 @@
 'use strict'
 let fs = require("fs");
-let Path = require('path');
+let Path = require("path");
 let bluebird = require("bluebird");
 let config = require("../config");
 

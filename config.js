@@ -1,5 +1,6 @@
 'use strict'
-let Path = require('path');
+let fs = require("fs");
+let Path = require("path");
 let constant = require("./constant");
 
 let config = {
@@ -24,5 +25,7 @@ config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight
 config.media.forEach((players) => {
     players.push(constant.players.none);
 });
+
+fs.mkdir(config.mediaPath, (e) => { });
 
 module.exports = config;
