@@ -12,6 +12,15 @@ let Setting = function (properties) {
     _.assign(this, properties);
 };
 
+Setting.injectDefaults = function (setting) {
+    setting = setting || { media: {} };
+    config.media.forEach((players, ext) => {
+        if (!_.includes(players, setting.media[ext]))
+            setting.media[ext] = players[0];
+    });
+    return setting;
+};
+
 Setting.findByUserName = function* (userName) {
     let setting = null;
     let result = yield table.getAll(userName, { index: "userName" });

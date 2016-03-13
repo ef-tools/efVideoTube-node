@@ -48,6 +48,10 @@ describe("Test /index api", function () {
     });
 
     it("should get file system structure", function* () {
+        let result = yield agent.get(constant.urls.settings).expect(200).end();
+        let media = result.body.media;
+        let exts = Object.keys(media).filter(ext => media[ext].active !== constant.players.none);
+
         let nodes = [mock.fs.Media];
         nodes[0]["?name"] = nodes[0]["?path"] = "";
         for (let i = 0; i < nodes.length; i++) {
@@ -55,9 +59,9 @@ describe("Test /index api", function () {
             let items = Object.keys(fs);
             items.sort();
             let dirNames = items.filter(i => typeof fs[i] !== "string");
-            let fileNames = items.filter(i => typeof fs[i] === "string" && !i.startsWith("?"));
+            let fileNames = items.filter(i => typeof fs[i] === "string" && _.includes(exts, Path.extname(i)) && !i.startsWith("?"));
 
-            let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
+            result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
             assert.equalCaseInsensitive(result.body.name, fs["?name"]);
             assert.equalCaseInsensitive(result.body.path, fs["?path"]);
             assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {

@@ -8,11 +8,11 @@ let constant = require("../constant");
 module.exports = {
     get: function* () {
         let setting = yield Setting.findByUserName(this.claims.userName);
+        setting = Setting.injectDefaults(setting);
         let media = {};
         config.media.forEach((players, ext) => {
-            let isValid = setting && _.includes(players, setting.media[ext]);
             media[ext] = {
-                active: isValid ? setting.media[ext] : players[0],
+                active: setting.media[ext],
                 players: players
             };
         });
