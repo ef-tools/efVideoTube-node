@@ -42,20 +42,22 @@ describe("Test /index api", function () {
     });
 
     it("should get root structure by default", function* () {
-        let resultRoot = yield agent.get(constant.urls.index).query("path", "").expect(200).end();
+        let resultRoot = yield agent.get(constant.urls.index).query({ path: "" }).expect(200).end();
         let resultDefault = yield agent.get(constant.urls.index).expect(200).end();
         assert.deepStrictEqual(resultDefault.body, resultRoot.body);
     });
 
     it("should get file system structure", function* () {
-        let nodes = [mock.fs];
-        mock.fs["?name"] = mock.fs["?path"] = "";
+        let nodes = [mock.fs.Media];
+        nodes[0]["?name"] = nodes[0]["?path"] = "";
         for (let i = 0; i < nodes.length; i++) {
             let fs = nodes[i];
-            let dirNames = Object.keys(fs).filter(f => typeof fs[f] !== "string")
-            let fileNames = Object.keys(fs).filter(f => typeof fs[f] === "string")
+            let items = Object.keys(fs);
+            items.sort();
+            let dirNames = items.filter(i => typeof fs[i] !== "string");
+            let fileNames = items.filter(i => typeof fs[i] === "string" && !i.startsWith("?"));
 
-            let result = yield agent.get(constant.urls.index).query("path", fs["?path"]).expect(200).end();
+            let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
             assert.equalCaseInsensitive(result.body.name, fs["?name"]);
             assert.equalCaseInsensitive(result.body.path, fs["?path"]);
             assert.deepStrictEqual(result.body.dirs, dirNames);
@@ -63,7 +65,7 @@ describe("Test /index api", function () {
 
             dirNames.forEach(d => {
                 fs[d]["?name"] = d;
-                fs[d]["?path"]=path.join(fs["?path"], d);
+                fs[d]["?path"] = path.join(fs["?path"], d);
                 nodes.push(fs[d]);
             });
         }
