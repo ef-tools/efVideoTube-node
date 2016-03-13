@@ -9,7 +9,6 @@ bluebird.promisifyAll(fs);
 module.exports = {
     get: function* () {
         let relativePath = this.query.path || "";
-        console.log(this.query.path);
         let absolutePath = Path.join(config.mediaPath, relativePath);
         let itemNames = yield fs.readdirAsync(absolutePath);
         let webModel = {
@@ -20,7 +19,10 @@ module.exports = {
         };
         for (let i of itemNames) {
             let collection = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory() ? webModel.dirs : webModel.files;
-            collection.push(i);
+            collection.push({
+                name: i,
+                path: Path.join(relativePath, i)
+            });
         }
         this.body = webModel;
     }

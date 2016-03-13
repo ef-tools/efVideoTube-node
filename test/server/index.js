@@ -60,8 +60,8 @@ describe("Test /index api", function () {
             let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
             assert.equalCaseInsensitive(result.body.name, fs["?name"]);
             assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-            assert.deepStrictEqual(result.body.dirs, dirNames);
-            assert.deepStrictEqual(result.body.files, fileNames);
+            assert.deepStrictEqual(result.body.dirs.map(d => d.name), dirNames);
+            assert.deepStrictEqual(result.body.files.map(d => d.name), fileNames);
 
             dirNames.forEach(d => {
                 fs[d]["?name"] = d;
