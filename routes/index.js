@@ -20,9 +20,12 @@ module.exports = {
         let webModel = {
             name: Path.basename(relativePath),
             path: relativePath,
+            parent: Path.dirname(relativePath),
             dirs: [],
             files: []
         };
+        if (webModel.parent === ".")
+            webModel.parent = "";
         for (let i of itemNames) {
             let isDir = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory();
             let ext = Path.extname(i);

@@ -52,7 +52,7 @@ describe("Test /index api", function () {
         let setting = Setting.injectDefaults();
         let exts = Object.keys(setting.media).filter(ext => setting.media[ext] !== constant.players.none);
         let nodes = [mock.fs.Media];
-        nodes[0]["?name"] = nodes[0]["?path"] = "";
+        nodes[0]["?name"] = nodes[0]["?path"]= nodes[0]["?parent"] = "";
         for (let i = 0; i < nodes.length; i++) {
             let fs = nodes[i];
             let items = Object.keys(fs);
@@ -62,6 +62,7 @@ describe("Test /index api", function () {
             dirNames.forEach(d => {
                 fs[d]["?name"] = d;
                 fs[d]["?path"] = Path.join(fs["?path"], d);
+                fs[d]["?parent"] = fs["?path"];
                 nodes.push(fs[d]);
             });
 
@@ -69,6 +70,7 @@ describe("Test /index api", function () {
                 let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
                 assert.equalCaseInsensitive(result.body.name, fs["?name"]);
                 assert.equalCaseInsensitive(result.body.path, fs["?path"]);
+                assert.equalCaseInsensitive(result.body.parent, fs["?parent"]);
                 assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
                     return {
                         name: d,
