@@ -37,11 +37,11 @@ describe("Test /index api", function () {
     it("should get 401 without token", function* () {
         yield agentFactory(server).get(constant.urls.index).expect(401).end();
     });
- 
-    it("should get 404 on invalid path", function *() {
+
+    it("should get 404 on invalid path", function* () {
         yield agent.get(constant.urls.index).query({ path: "not exist" }).expect(404).end();
     });
-    
+
     it("should get root structure by default", function* () {
         let resultRoot = yield agent.get(constant.urls.index).query({ path: "" }).expect(200).end();
         let resultDefault = yield agent.get(constant.urls.index).expect(200).end();
@@ -65,7 +65,13 @@ describe("Test /index api", function () {
                 let result = yield agent.get(constant.urls.index).query({ path: itemData.path }).expect(200).end();
                 assert.equalCaseInsensitive(result.body.name, itemData.name);
                 assert.equalCaseInsensitive(result.body.path, itemData.path);
-                assert.equalCaseInsensitive(result.body.parent, itemData.parent);
+                if (itemData.parent) {
+                    assert(result.body.parent);
+                    assert.equalCaseInsensitive(result.body.parent.name, Path.basename(itemData.parent));
+                    assert.equalCaseInsensitive(result.body.parent.path, itemData.parent);
+                }
+                else
+                    assert.strictEqual(result.body.parent, null);
                 assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
                     return { name: d, path: Path.join(itemData.path, d) };
                 }));

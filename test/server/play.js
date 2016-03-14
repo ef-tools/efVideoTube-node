@@ -34,12 +34,37 @@ describe("Test /play api", function () {
         yield Setting.deleteByUserName(user.userName);
         mockFs.restore();
     });
-    
+
     it("should get 401 without token", function* () {
         yield agentFactory(server).get(constant.urls.play).expect(401).end();
     });
-    
-    it("should get 404 on invalid path", function *() {
+
+    it("should get 404 on invalid path", function* () {
         yield agent.get(constant.urls.play).query({ path: "not exist" }).expect(404).end();
+    });
+
+    it("should get play info for mp4", function* () {
+        let mp4Path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
+        let parentPath = Path.dirname(mp4Path);
+        let result = yield agent.get(constant.urls.play).query({ path: mp4Path }).expect(200, {
+            name: Path.basename(mp4Path),
+            video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
+            subtitles: [],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+        assert.strictEqual(result.body.name, Path.basename(mp4Path));
+        assert.strictEqual(result.body.video, "/Media/Video/ACG/secret base ～君がくれたもの～.mp4");
+        assert.deepStrictEqual(result.body.subtitles, []);
+    });
+
+    it("should get play info for webm", function* () {
+        let webmPath = Path.join("Video", "ACG", "Blue_Sky_Azure_girl.webm");
+        let result = yield agent.get(constant.urls.play).query({ path: webmPath }).expect(200).end();
+        assert.strictEqual(result.body.name, Path.basename(webmPath));
+        assert.strictEqual(result.body.video, "/Media/Video/ACG/Blue_Sky_Azure_girl.webm");
+        assert.deepStrictEqual(result.body.subtitles, []);
     });
 });
