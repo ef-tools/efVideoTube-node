@@ -31,6 +31,7 @@ describe("Test /play api", function () {
     });
     after(function* () {
         yield User.deleteByUserName(user.userName);
+        yield Setting.deleteByUserName(user.userName);
         mockFs.restore();
     });
     

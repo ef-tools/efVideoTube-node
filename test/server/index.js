@@ -48,46 +48,35 @@ describe("Test /index api", function () {
         let setting = Setting.injectDefaults();
         let exts = Object.keys(setting.media).filter(ext => setting.media[ext] !== constant.players.none);
         let nodes = [mock.fs.Media];
-        nodes[0]["?name"] = nodes[0]["?path"]= nodes[0]["?parent"] = "";
         for (let i = 0; i < nodes.length; i++) {
-            let fs = nodes[i];
-            let items = Object.keys(fs);
-            items.sort();
-            let dirNames = items.filter(i => typeof fs[i] !== "string");
-            let fileNames = items.filter(i => typeof fs[i] === "string" && _.includes(exts, Path.extname(i)) && !i.startsWith("?"));
-            dirNames.forEach(d => {
-                fs[d]["?name"] = d;
-                fs[d]["?path"] = Path.join(fs["?path"], d);
-                fs[d]["?parent"] = fs["?path"];
-                nodes.push(fs[d]);
-            });
+            let item = nodes[i];
+            let subItemNames = Object.keys(item);
+            subItemNames.sort();
+            let dirNames = subItemNames.filter(i => typeof item[i] !== "string");
+            let fileNames = subItemNames.filter(i => typeof item[i] === "string" && _.includes(exts, Path.extname(i)));
+            dirNames.forEach(d => { nodes.push(item[d]); });
 
-            it("should get index of " + (fs["?path"] || "ROOT"), function* () {
-                let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
-                assert.equalCaseInsensitive(result.body.name, fs["?name"]);
-                assert.equalCaseInsensitive(result.body.path, fs["?path"]);
-                assert.equalCaseInsensitive(result.body.parent, fs["?parent"]);
+            let itemData = mock.mediaData.get(item);
+            it("should get index of " + (itemData.path || "ROOT"), function* () {
+                let result = yield agent.get(constant.urls.index).query({ path: itemData.path }).expect(200).end();
+                assert.equalCaseInsensitive(result.body.name, itemData.name);
+                assert.equalCaseInsensitive(result.body.path, itemData.path);
+                assert.equalCaseInsensitive(result.body.parent, itemData.parent);
                 assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
-                    return {
-                        name: d,
-                        path: Path.join(fs["?path"], d)
-                    };
+                    return { name: d, path: Path.join(itemData.path, d) };
                 }));
                 assert.deepStrictEqual(result.body.files, fileNames.map(f => {
-                    return {
-                        name: f,
-                        path: Path.join(fs["?path"], f)
-                    };
+                    return { name: f, path: Path.join(itemData.path, f) };
                 }));
             });
         }
     });
 
     describe("Test with settings", function () {
-        after(function *() {
+        after(function* () {
             yield Setting.deleteByUserName(user.userName);
         });
-        
+
         it("should get different items after settings being changed", function* () {
             let itemPath = Path.join("Video", "ACG");
             let result1 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
