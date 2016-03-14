@@ -37,7 +37,11 @@ describe("Test /index api", function () {
     it("should get 401 without token", function* () {
         yield agentFactory(server).get(constant.urls.index).expect(401).end();
     });
-
+ 
+    it("should get 404 on invalid path", function *() {
+        yield agent.get(constant.urls.index).query({ path: "not exist" }).expect(404).end();
+    });
+    
     it("should get root structure by default", function* () {
         let resultRoot = yield agent.get(constant.urls.index).query({ path: "" }).expect(200).end();
         let resultDefault = yield agent.get(constant.urls.index).expect(200).end();

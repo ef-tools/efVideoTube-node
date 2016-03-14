@@ -13,7 +13,13 @@ module.exports = {
     get: function* () {
         let relativePath = this.query.path || "";
         let absolutePath = Path.join(config.mediaPath, relativePath);
-        let itemNames = yield fs.readdirAsync(absolutePath);
+        let itemNames;
+        try {
+            itemNames = yield fs.readdirAsync(absolutePath);
+        } catch (e) {
+            this.status = 404;
+            return;
+        }
         let setting = yield Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
 
