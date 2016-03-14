@@ -1,8 +1,9 @@
 module.exports = {
     urls: {
         signin: "/signin",
+        settings: "/settings",
         index: "/index",
-        settings: "/settings"
+        play: "/play"
     },
     players: {
         none: "none",

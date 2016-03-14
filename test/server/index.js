@@ -13,10 +13,6 @@ let config = require("../../config");
 let constant = require("../../constant");
 let mock = require("../mock");
 
-assert.equalCaseInsensitive = function (actual, expected) {
-    assert.strictEqual(actual.toUpperCase(), expected.toUpperCase());
-};
-
 describe("Test /index api", function () {
     let server = webApp.listen();
     let user, agent;
