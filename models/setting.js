@@ -13,7 +13,8 @@ let Setting = function (properties) {
 };
 
 Setting.injectDefaults = function (setting) {
-    setting = setting || { media: {} };
+    if (!setting)
+        setting = { media: {} };
     config.media.forEach((players, ext) => {
         if (!_.includes(players, setting.media[ext]))
             setting.media[ext] = players[0];

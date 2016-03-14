@@ -14,7 +14,7 @@ let constant = require("../../constant");
 let mock = require("../mock");
 
 assert.equalCaseInsensitive = function (actual, expected) {
-    assert.equal(actual.toUpperCase(), expected.toUpperCase());
+    assert.strictEqual(actual.toUpperCase(), expected.toUpperCase());
 };
 
 describe("Test /index api", function () {
@@ -65,7 +65,7 @@ describe("Test /index api", function () {
                 nodes.push(fs[d]);
             });
 
-            it(util.format("should get index of %s", fs["?path"] || "ROOT"), function* () {
+            it("should get index of " + (fs["?path"] || "ROOT"), function* () {
                 let result = yield agent.get(constant.urls.index).query({ path: fs["?path"] }).expect(200).end();
                 assert.equalCaseInsensitive(result.body.name, fs["?name"]);
                 assert.equalCaseInsensitive(result.body.path, fs["?path"]);
@@ -83,5 +83,19 @@ describe("Test /index api", function () {
                 }));
             });
         }
+    });
+
+    describe("Test with settings", function () {
+        after(function *() {
+            yield Setting.deleteByUserName(user.userName);
+        });
+        
+        it("should get different items after settings being changed", function* () {
+            let itemPath = Path.join("Video", "ACG");
+            let result1 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
+            yield agent.post(constant.urls.settings).send({ media: { ".mp4": constant.players.none } }).expect(200).end();
+            let result2 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
+            assert.notEqual(result2, result1);
+        });
     });
 });

@@ -13,12 +13,12 @@ describe("Test user model", function() {
 
     it("should create a user", function* () {
         let user = new User();
-        assert.equal(typeof user, "object");
+        assert.strictEqual(typeof user, "object");
     });
 
     it("should assign fields", function* () {
         let user = new User({ userName: userName });
-        assert.equal(user.userName, userName);
+        assert.strictEqual(user.userName, userName);
     });
 
     it("should have id after being saved to db", function* () {
@@ -32,7 +32,7 @@ describe("Test user model", function() {
         yield user.save();
         let dbUser = yield User.findByUserName(userName);
         assert(dbUser instanceof User);
-        assert.equal(dbUser.userName, userName);
+        assert.strictEqual(dbUser.userName, userName);
     });
 
     it("should delete a user", function* () {
@@ -40,7 +40,7 @@ describe("Test user model", function() {
         yield user.save();
         yield User.deleteByUserName(userName);
         let dbUser = yield User.findByUserName(userName);
-        assert.equal(dbUser, null);
+        assert.strictEqual(dbUser, null);
     });
 
     it("should have a hashed password", function* () {
@@ -53,7 +53,7 @@ describe("Test user model", function() {
         let user = new User({ userName: userName, password: password });
         yield user.save();
         let dbUser = yield User.findByUserName(userName);
-        assert.equal(dbUser.password, user.password);
+        assert.strictEqual(dbUser.password, user.password);
     });
 
     it("should be valid with correct pwd", function* () {

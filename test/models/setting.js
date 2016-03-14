@@ -14,13 +14,13 @@ describe("Test setting model", function() {
 
     it("should create a setting", function* () {
         let setting = new Setting();
-        assert.equal(typeof setting, "object");
+        assert.strictEqual(typeof setting, "object");
     });
 
     it("should assign fields", function* () {
         let setting = new Setting({ userName: userName, media: customMedia });
-        assert.equal(setting.userName, userName);
-        assert.equal(setting.media, customMedia);
+        assert.strictEqual(setting.userName, userName);
+        assert.strictEqual(setting.media, customMedia);
     });
 
     it("should have id after being saved to db", function* () {
@@ -34,22 +34,22 @@ describe("Test setting model", function() {
         yield setting.save();
         let dbSetting = yield Setting.findByUserName(userName);
         assert(dbSetting instanceof Setting);
-        assert.equal(dbSetting.userName, userName);
+        assert.strictEqual(dbSetting.userName, userName);
         assert.deepStrictEqual(dbSetting.media, customMedia);
     });
 
     it("should not save with empty media", function* () {
         let setting = new Setting({ userName: userName });
         yield setting.save();
-        assert.equal(typeof setting.id, "undefined");
+        assert.strictEqual(typeof setting.id, "undefined");
 
         setting.media = {};
         yield setting.save();
-        assert.equal(typeof setting.id, "undefined");
+        assert.strictEqual(typeof setting.id, "undefined");
 
         setting.media = { p: "whatever" };
         yield setting.save();
-        assert.equal(typeof setting.id, "undefined");
+        assert.strictEqual(typeof setting.id, "undefined");
     });
 
     it("should filter invalid extensions", function* () {
@@ -61,7 +61,7 @@ describe("Test setting model", function() {
             }
         });
         yield setting.save();
-        assert.equal(Object.keys(setting.media).length, 1);
+        assert.strictEqual(Object.keys(setting.media).length, 1);
         assert(".wmv" in setting.media);
 
         let dbSetting = yield Setting.findByUserName(userName);
@@ -78,7 +78,7 @@ describe("Test setting model", function() {
             }
         });
         yield setting.save();
-        assert.equal(Object.keys(setting.media).length, 1);
+        assert.strictEqual(Object.keys(setting.media).length, 1);
         assert(".mp4" in setting.media);
 
         let dbSetting = yield Setting.findByUserName(userName);
@@ -90,6 +90,6 @@ describe("Test setting model", function() {
         yield setting.save();
         yield Setting.deleteByUserName(userName);
         let dbSetting = yield Setting.findByUserName(userName);
-        assert.equal(dbSetting, null);
+        assert.strictEqual(dbSetting, null);
     });
 });
