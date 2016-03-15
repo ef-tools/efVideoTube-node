@@ -4,6 +4,7 @@ let Path = require("path");
 let _ = require("lodash");
 let bluebird = require("bluebird");
 let Setting = require("../models/setting");
+let helper = require("../utils/helper");
 let config = require("../config");
 let constant = require("../constant");
 
@@ -30,12 +31,7 @@ module.exports = {
             dirs: [],
             files: []
         };
-        let parentPath = Path.dirname(relativePath);
-        if (parentPath !== ".")
-            webModel.parent = {
-                name: Path.basename(parentPath),
-                path: parentPath
-            };
+        helper.setParent(webModel, relativePath);
         for (let i of itemNames) {
             let isDir = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory();
             let ext = Path.extname(i);

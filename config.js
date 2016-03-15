@@ -12,7 +12,7 @@ let config = {
         db: "efvt"
     },
     media: new Map(),
-    mediaPath: Path.join(process.cwd(), "Media")
+    mediaPath: Path.join(process.cwd(), constant.mediaDirectoryName)
 };
 
 // first player will be set as the default

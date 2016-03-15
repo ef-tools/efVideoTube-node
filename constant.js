@@ -1,9 +1,10 @@
 module.exports = {
+    mediaDirectoryName: "Media",
     urls: {
         signin: "/signin",
         settings: "/settings",
         index: "/index",
-        play: "/play"
+        video: "/video"
     },
     players: {
         none: "none",

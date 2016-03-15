@@ -13,7 +13,7 @@ let config = require("../../config");
 let constant = require("../../constant");
 let mock = require("../mock");
 
-describe("Test /play api", function () {
+describe("Test /video api", function () {
     let server = webApp.listen();
     let user, agent;
 
@@ -36,17 +36,17 @@ describe("Test /play api", function () {
     });
 
     it("should get 401 without token", function* () {
-        yield agentFactory(server).get(constant.urls.play).expect(401).end();
+        yield agentFactory(server).get(constant.urls.video).expect(401).end();
     });
 
     it("should get 404 on invalid path", function* () {
-        yield agent.get(constant.urls.play).query({ path: "not exist" }).expect(404).end();
+        yield agent.get(constant.urls.video).query({ path: "not exist" }).expect(404).end();
     });
 
     it("should get play info for mp4", function* () {
         let mp4Path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
         let parentPath = Path.dirname(mp4Path);
-        let result = yield agent.get(constant.urls.play).query({ path: mp4Path }).expect(200, {
+        let result = yield agent.get(constant.urls.video).query({ path: mp4Path }).expect(200, {
             name: Path.basename(mp4Path),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
             subtitles: [],
@@ -62,7 +62,7 @@ describe("Test /play api", function () {
 
     it("should get play info for webm", function* () {
         let webmPath = Path.join("Video", "ACG", "Blue_Sky_Azure_girl.webm");
-        let result = yield agent.get(constant.urls.play).query({ path: webmPath }).expect(200).end();
+        let result = yield agent.get(constant.urls.video).query({ path: webmPath }).expect(200).end();
         assert.strictEqual(result.body.name, Path.basename(webmPath));
         assert.strictEqual(result.body.video, "/Media/Video/ACG/Blue_Sky_Azure_girl.webm");
         assert.deepStrictEqual(result.body.subtitles, []);
