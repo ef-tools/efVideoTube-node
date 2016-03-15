@@ -39,15 +39,19 @@ describe("Test /video api", function () {
         yield agentFactory(server).get(constant.urls.video).expect(401).end();
     });
 
-    it("should get 404 on invalid path", function* () {
-        yield agent.get(constant.urls.video).query({ path: "not exist" }).expect(404).end();
+    it("should get 400 on invalid file type", function* () {
+        yield agent.get(constant.urls.video).query({ path: "「アニメ最萌トーナメント2007」本選開幕記念MAD：「はならんまん」.avi" }).expect(400).end();
     });
 
-    it("should get play info for mp4", function* () {
-        let mp4Path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
-        let parentPath = Path.dirname(mp4Path);
-        let result = yield agent.get(constant.urls.video).query({ path: mp4Path }).expect(200, {
-            name: Path.basename(mp4Path),
+    it("should get 404 on invalid path", function* () {
+        yield agent.get(constant.urls.video).query({ path: "not exist.mp4" }).expect(404).end();
+    });
+
+    it("should get play info for media", function* () {
+        let path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.video).query({ path: path }).expect(200, {
+            name: Path.basename(path),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
             subtitles: [],
             parent: {
@@ -55,16 +59,5 @@ describe("Test /video api", function () {
                 path: parentPath
             }
         }).end();
-        assert.strictEqual(result.body.name, Path.basename(mp4Path));
-        assert.strictEqual(result.body.video, "/Media/Video/ACG/secret base ～君がくれたもの～.mp4");
-        assert.deepStrictEqual(result.body.subtitles, []);
-    });
-
-    it("should get play info for webm", function* () {
-        let webmPath = Path.join("Video", "ACG", "Blue_Sky_Azure_girl.webm");
-        let result = yield agent.get(constant.urls.video).query({ path: webmPath }).expect(200).end();
-        assert.strictEqual(result.body.name, Path.basename(webmPath));
-        assert.strictEqual(result.body.video, "/Media/Video/ACG/Blue_Sky_Azure_girl.webm");
-        assert.deepStrictEqual(result.body.subtitles, []);
     });
 });

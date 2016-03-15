@@ -13,7 +13,7 @@ bluebird.promisifyAll(fs);
 module.exports = {
     get: function* () {
         let relativePath = this.query.path || "";
-        if (_.includes(config.media.keys, Path.extname(relativePath))) {
+        if (!config.media.has(Path.extname(relativePath))) {
             this.status = 400;
             return;
         }
