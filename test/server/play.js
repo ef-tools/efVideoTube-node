@@ -13,7 +13,7 @@ let config = require("../../config");
 let constant = require("../../constant");
 let mock = require("../mock");
 
-describe("Test /video api", function () {
+describe("Test /play api", function () {
     let server = webApp.listen();
     let user, agent;
 
@@ -36,21 +36,21 @@ describe("Test /video api", function () {
     });
 
     it("should get 401 without token", function* () {
-        yield agentFactory(server).get(constant.urls.video).expect(401).end();
+        yield agentFactory(server).get(constant.urls.play).expect(401).end();
     });
 
     it("should get 400 on invalid file type", function* () {
-        yield agent.get(constant.urls.video).query({ path: "「アニメ最萌トーナメント2007」本選開幕記念MAD：「はならんまん」.avi" }).expect(400).end();
+        yield agent.get(constant.urls.play).query({ path: "「アニメ最萌トーナメント2007」本選開幕記念MAD：「はならんまん」.avi" }).expect(400).end();
     });
 
     it("should get 404 on invalid path", function* () {
-        yield agent.get(constant.urls.video).query({ path: "not exist.mp4" }).expect(404).end();
+        yield agent.get(constant.urls.play).query({ path: "not exist.mp4" }).expect(404).end();
     });
 
     it("should get play info for media", function* () {
         let path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
         let parentPath = Path.dirname(path);
-        yield agent.get(constant.urls.video).query({ path: path }).expect(200, {
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
             name: Path.basename(path),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
             subtitles: [],

@@ -4,7 +4,7 @@ module.exports = {
         signin: "/signin",
         settings: "/settings",
         index: "/index",
-        video: "/video"
+        play: "/play"
     },
     players: {
         none: "none",
