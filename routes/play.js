@@ -30,7 +30,7 @@ module.exports = {
         setting = Setting.injectDefaults(setting);
 
         let webModel;
-        if (config.getMediaType(ext) === constant.types.video) {
+        if (helper.getMediaType(ext) === constant.types.video) {
             webModel = {
                 type: constant.types.video,
                 player: setting.media[ext],
@@ -39,7 +39,7 @@ module.exports = {
                 subtitles: [],
                 parent: null
             };
-            if (config.canExtractAudio(ext))
+            if (helper.canExtract(ext))
                 webModel.audio = util.format("%s?path=%s",
                     constant.urls.audio, encodeURIComponent(relativePath));
         } else {

@@ -7,7 +7,6 @@ let _ = require("lodash");
 let mockFs = require('mock-fs');
 let webApp = require("../../web-app");
 let User = require("../../models/user");
-let Setting = require("../../models/setting");
 let agentFactory = require("../../utils/agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
@@ -31,7 +30,6 @@ describe("Test /play api", function () {
     });
     after(function* () {
         yield User.deleteByUserName(user.userName);
-        yield Setting.deleteByUserName(user.userName);
         mockFs.restore();
     });
 

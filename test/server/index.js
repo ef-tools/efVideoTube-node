@@ -8,6 +8,7 @@ let mockFs = require('mock-fs');
 let webApp = require("../../web-app");
 let User = require("../../models/user");
 let Setting = require("../../models/setting");
+let helper = require("../../utils/helper");
 let agentFactory = require("../../utils/agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
@@ -39,11 +40,11 @@ describe("Test /index api", function () {
     });
 
     it("should get 404 on invalid path", function* () {
-        yield agent.get(constant.urls.index).query({ path: "not exist" }).expect(404).end();
+        yield agent.get(constant.urls.index).query({ dir: "not exist" }).expect(404).end();
     });
 
     it("should get root structure by default", function* () {
-        let resultRoot = yield agent.get(constant.urls.index).query({ path: "" }).expect(200).end();
+        let resultRoot = yield agent.get(constant.urls.index).query({ dir: "" }).expect(200).end();
         let resultDefault = yield agent.get(constant.urls.index).expect(200).end();
         assert.deepStrictEqual(resultDefault.body, resultRoot.body);
     });
@@ -62,7 +63,7 @@ describe("Test /index api", function () {
 
             let itemData = mock.mediaData.get(item);
             it("should get index of " + (itemData.path || "ROOT"), function* () {
-                let result = yield agent.get(constant.urls.index).query({ path: itemData.path }).expect(200).end();
+                let result = yield agent.get(constant.urls.index).query({ dir: itemData.path }).expect(200).end();
                 assert.equalCaseInsensitive(result.body.name, itemData.name);
                 assert.equalCaseInsensitive(result.body.path, itemData.path);
                 if (itemData.parent) {
@@ -76,7 +77,13 @@ describe("Test /index api", function () {
                     return { name: d, path: Path.join(itemData.path, d) };
                 }));
                 assert.deepStrictEqual(result.body.files, fileNames.map(f => {
-                    return { name: f, path: Path.join(itemData.path, f) };
+                    let types = [];
+                    let ext = Path.extname(f);
+                    if (helper.getMediaType(ext) === constant.types.video)
+                        types.push(constant.types.video);
+                    if (helper.hasAudio(ext))
+                        types.push(constant.types.audio);
+                    return { name: f, path: Path.join(itemData.path, f), types: types };
                 }));
             });
         }
@@ -89,9 +96,9 @@ describe("Test /index api", function () {
 
         it("should get different items after settings being changed", function* () {
             let itemPath = Path.join("Video", "ACG");
-            let result1 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
+            let result1 = yield agent.get(constant.urls.index).query({ dir: itemPath }).expect(200).end();
             yield agent.post(constant.urls.settings).send({ media: { ".mp4": constant.players.none } }).expect(200).end();
-            let result2 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
+            let result2 = yield agent.get(constant.urls.index).query({ dir: itemPath }).expect(200).end();
             assert.notEqual(result2.body, result1.body);
         });
     });

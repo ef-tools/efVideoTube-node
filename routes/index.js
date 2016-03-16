@@ -12,7 +12,7 @@ bluebird.promisifyAll(fs);
 
 module.exports = {
     get: function* () {
-        let relativePath = this.query.path || "";
+        let relativePath = this.query.dir || "";
         let absolutePath = Path.join(config.mediaPath, relativePath);
         let itemNames;
         try {
@@ -34,13 +34,26 @@ module.exports = {
         helper.setParent(webModel, relativePath);
         for (let i of itemNames) {
             let isDir = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory();
-            let ext = Path.extname(i).toLowerCase();
-            if (isDir || (_.includes(Object.keys(setting.media), ext) && setting.media[ext] !== constant.players.none)) {
-                let collection = isDir ? webModel.dirs : webModel.files;
-                collection.push({
+            if (isDir) {
+                webModel.dirs.push({
                     name: i,
                     path: Path.join(relativePath, i)
                 });
+            }
+            else {
+                let ext = Path.extname(i).toLowerCase();
+                if (config.media.has(ext) && setting.media[ext] !== constant.players.none) {
+                    let types = [];
+                    if (helper.getMediaType(ext) === constant.types.video)
+                        types.push(constant.types.video);
+                    if (helper.hasAudio(ext))
+                        types.push(constant.types.audio);
+                    webModel.files.push({
+                        name: i,
+                        path: Path.join(relativePath, i),
+                        types: types
+                    });
+                }
             }
         }
         this.body = webModel;

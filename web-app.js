@@ -7,7 +7,6 @@ let checkAuth = require("./utils/check-auth");
 let routeIndex = require("./routes/index");
 let routeSettings = require("./routes/settings");
 let routePlay = require("./routes/play");
-let routePlaylist = require("./routes/playlist");
 let routeHome = require("./routes/public/home");
 let routeSignIn = require("./routes/public/sign-in");
 let constant = require("./constant");
@@ -17,7 +16,6 @@ router.get(constant.urls.index, routeIndex.get);
 router.get(constant.urls.settings, routeSettings.get);
 router.post(constant.urls.settings, routeSettings.post);
 router.get(constant.urls.play, routePlay.get);
-router.get(constant.urls.playlist, routePlaylist.get);
 
 routerPublic.get("/", routeHome.get);
 routerPublic.get(constant.urls.signin, routeSignIn.get);
