@@ -19,6 +19,10 @@ mediaPlayers.forEach((players) => {
 let mediaPath = Path.join(process.cwd(), constant.mediaDirectoryName);
 fs.mkdir(mediaPath, (e) => { });
 
+function throwInvalidExtension(ext) {
+    throw new Error(util.format("Invalid extension name: %s", ext));
+}
+
 module.exports = {
     port: 3000,
     secret: "efVideoTube",
@@ -30,7 +34,7 @@ module.exports = {
     media: mediaPlayers,
     mediaPath: mediaPath,
     getMediaType: function (ext) {
-        switch (ext.toLowerCase()) {
+        switch (ext) {
             case ".mp4":
             case ".webm":
             case ".wmv":
@@ -40,7 +44,21 @@ module.exports = {
             case ".mp3":
                 return constant.types.audio;
             default:
-                throw new Error(util.format("Invalid extension name: %s", ext));
+                throwInvalidExtension(ext);
+        }
+    },
+    canExtractAudio: function (ext) {
+        switch (ext) {
+            case ".mp4":
+            case ".webm":
+                return true;
+            case ".wmv":
+            case ".flv":
+            case ".m4a":
+            case ".mp3":
+                return false;
+            default:
+                throwInvalidExtension(ext);
         }
     }
 };

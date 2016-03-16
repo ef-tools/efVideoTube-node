@@ -1,4 +1,5 @@
 'use strict'
+let util = require("util");
 let fs = require("fs");
 let Path = require("path");
 let _ = require("lodash");
@@ -10,12 +11,10 @@ let constant = require("../constant");
 
 bluebird.promisifyAll(fs);
 
-
-
 module.exports = {
     get: function* () {
         let relativePath = this.query.path || "";
-        let ext = Path.extname(relativePath);
+        let ext = Path.extname(relativePath).toLowerCase();
         if (!config.media.has(ext)) {
             this.status = 400;
             return;
@@ -41,6 +40,9 @@ module.exports = {
                 subtitles: [],
                 parent: null
             };
+            if (config.canExtractAudio(ext))
+                webModel.audio = util.format("%s?path=%s",
+                    constant.urls.audio, encodeURIComponent(relativePath));
         } else {
             webModel = {
                 type: constant.types.audio,

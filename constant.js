@@ -8,7 +8,9 @@ module.exports = {
         signin: "/signin",
         settings: "/settings",
         index: "/index",
-        play: "/play"
+        play: "/play",
+        audio: "/play/audio",
+        subtitle: "/play/subtitle"
     },
     players: {
         none: "none",

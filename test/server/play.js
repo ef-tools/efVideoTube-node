@@ -55,6 +55,7 @@ describe("Test /play api", function () {
             player: constant.players.h5video,
             name: Path.basename(path),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
+            audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [],
             parent: {
                 name: Path.basename(parentPath),
@@ -71,6 +72,7 @@ describe("Test /play api", function () {
             player: constant.players.h5video,
             name: Path.basename(path),
             video: "/Media/Video/ACG/Blue_Sky_Azure_girl.webm",
+            audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [],
             parent: {
                 name: Path.basename(parentPath),
@@ -134,6 +136,26 @@ describe("Test /play api", function () {
             player: constant.players.h5audio,
             name: Path.basename(path),
             audio: "/Media/AudioBook/For a New Liberty/Introduction Llewellyn H Rockwell Jr.mp3",
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get ass subtitles", function* () {
+        let path = Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.mp4");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.h5video,
+            name: Path.basename(path),
+            video: "/Media/Video/Anime/[P.A.WORKS]/Hanasaku_Iroha_01.mp4",
+            audio: "/play/audio?path=" + encodeURIComponent(path),
+            subtitles: [
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.chs.ass")),
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.jpn.ass"))
+            ],
             parent: {
                 name: Path.basename(parentPath),
                 path: parentPath
