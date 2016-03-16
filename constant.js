@@ -1,5 +1,4 @@
 module.exports = {
-    mediaDirectoryName: "Media",
     types: {
         video: "v",
         audio: "a"

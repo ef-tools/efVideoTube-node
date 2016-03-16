@@ -4,22 +4,7 @@ let fs = require("fs");
 let Path = require("path");
 let constant = require("./constant");
 
-let mediaPlayers = new Map();
-// first player will be set as the default
-mediaPlayers.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
-mediaPlayers.set(".webm", [constant.players.h5video]);
-mediaPlayers.set(".wmv", [constant.players.silverlight]);
-mediaPlayers.set(".flv", [constant.players.flash]);
-mediaPlayers.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
-mediaPlayers.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
-mediaPlayers.forEach((players) => {
-    players.push(constant.players.none);
-});
-
-let mediaPath = Path.join(process.cwd(), constant.mediaDirectoryName);
-fs.mkdir(mediaPath, (e) => { });
-
-module.exports = {
+let config = {
     port: 3000,
     secret: "efVideoTube",
     rethinkdb: {
@@ -27,7 +12,29 @@ module.exports = {
         port: 28015,
         db: "efvt"
     },
-    media: mediaPlayers,
-    mediaPath: mediaPath,
+    media: new Map(),
+    mediaDirectoryName: "Media",
+    cacheDirectoryName: "MediaCache",
+    mediaPath: "",
+    cachePath: "",
     splittableExts: [".mp4", ".webm"]
 };
+
+// first player will be set as the default
+config.media.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
+config.media.set(".webm", [constant.players.h5video]);
+config.media.set(".wmv", [constant.players.silverlight]);
+config.media.set(".flv", [constant.players.flash]);
+config.media.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
+config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
+config.media.forEach((players) => {
+    players.push(constant.players.none);
+});
+
+config.mediaPath = Path.join(process.cwd(), config.mediaDirectoryName);
+config.cachePath = Path.join(process.cwd(), config.cacheDirectoryName);
+
+fs.mkdir(config.mediaPath, (e) => { });
+fs.mkdir(config.cachePath, (e) => { });
+
+module.exports = config;

@@ -7,7 +7,7 @@ let constant = require("../constant");
 
 module.exports = {
     getMediaUrl: function (path) {
-        return util.format("/%s/%s", constant.mediaDirectoryName, path.split("\\").join("/"));
+        return util.format("/%s/%s", config.mediaDirectoryName, path.split("\\").join("/"));
     },
     getMediaType: function (ext) {
         switch (ext) {
