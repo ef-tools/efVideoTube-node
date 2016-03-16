@@ -69,9 +69,9 @@ describe("Test /index api", function () {
                     assert(result.body.parent);
                     assert.equalCaseInsensitive(result.body.parent.name, Path.basename(itemData.parent));
                     assert.equalCaseInsensitive(result.body.parent.path, itemData.parent);
-                }
-                else
+                } else {
                     assert.strictEqual(result.body.parent, null);
+                }
                 assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
                     return { name: d, path: Path.join(itemData.path, d) };
                 }));
@@ -92,7 +92,7 @@ describe("Test /index api", function () {
             let result1 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
             yield agent.post(constant.urls.settings).send({ media: { ".mp4": constant.players.none } }).expect(200).end();
             let result2 = yield agent.get(constant.urls.index).query({ path: itemPath }).expect(200).end();
-            assert.notEqual(result2, result1);
+            assert.notEqual(result2.body, result1.body);
         });
     });
 });
