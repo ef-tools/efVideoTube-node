@@ -162,4 +162,24 @@ describe("Test /play api", function () {
             }
         }).end();
     });
+
+    it("should get srt subtitles", function* () {
+        let path = Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.webm");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.h5video,
+            name: Path.basename(path),
+            video: "/Media/Video/Economics/Why the Meltdown Should Have Surprised No One _ Peter Schiff.webm",
+            audio: "/play/audio?path=" + encodeURIComponent(path),
+            subtitles: [
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.en.srt")),
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.sc.ass"))
+            ],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
 });
