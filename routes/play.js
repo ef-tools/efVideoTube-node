@@ -28,6 +28,25 @@ module.exports = {
         }
         let setting = yield Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
+        
+        let files = yield fs.readdirAsync(Path.dirname(absolutePath));
+        let nameWithoutExt = Path.basename(relativePath, ext);
+        let partner = new RegExp(`${nameWithoutExt}.*$`, "i");
+        let subtitles = files.filter(f => partner.test(f) && _.includes(config.subtitleExts, Path.extname(f)));
+        let defaultSub = null;
+        let subModels = subtitles.map(function(s) {
+            let subtitleLang = config.subtitleLangs.get(Path.extname(Path.basename(s, Path.extname(s))).toLowerCase());
+            if (!defaultSub || subtitleLang.order < defaultSub.order) {
+                defaultSub = { srclang: subtitleLang.lang, order: subtitleLang.order };
+            }
+            return {
+                src:  util.format("%s?path=%s", constant.urls.subtitle, encodeURIComponent(Path.join(Path.dirname(relativePath), s))),
+                srclang: subtitleLang.lang,
+                label: subtitleLang.label,
+                default: false,
+            }
+        });
+        if (subModels.length > 0) subModels.find((m) => m.srclang == defaultSub.srclang).default = true;
 
         let webModel;
         if (helper.getMediaType(ext) === constant.types.video) {
@@ -36,7 +55,7 @@ module.exports = {
                 player: setting.media[ext],
                 name: Path.basename(relativePath),
                 video: helper.getMediaUrl(relativePath),
-                subtitles: [],
+                subtitles: subModels,
                 parent: null
             };
             if (helper.canExtract(ext))

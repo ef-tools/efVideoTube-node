@@ -150,10 +150,17 @@ describe("Test /play api", function () {
             name: Path.basename(path),
             video: "/Media/Video/Anime/[P.A.WORKS]/Hanasaku_Iroha/Hanasaku_Iroha_01.mp4",
             audio: "/play/audio?path=" + encodeURIComponent(path),
-            subtitles: [
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.chs.ass")),
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.jpn.ass"))
-            ],
+            subtitles: [{
+                src: "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.chs.ass")),
+                srclang: "zh-hans",
+                label: "中文(简体)",
+                default: true
+            }, {
+                src: "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.jpn.ass")),
+                srclang: "ja",
+                label: "日本語",
+                default: false
+            }],
             parent: {
                 name: Path.basename(parentPath),
                 path: parentPath
@@ -170,10 +177,17 @@ describe("Test /play api", function () {
             name: Path.basename(path),
             video: "/Media/Video/Economics/Why the Meltdown Should Have Surprised No One _ Peter Schiff.webm",
             audio: "/play/audio?path=" + encodeURIComponent(path),
-            subtitles: [
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.en.srt")),
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.sc.ass"))
-            ],
+            subtitles: [{
+                src: "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.en.srt")),
+                srclang: "en",
+                label: "English",
+                default: false
+            }, {
+                src: "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.sc.ass")),
+                srclang: "zh-hans",
+                label: "中文(简体)",
+                default: true
+            }],
             parent: {
                 name: Path.basename(parentPath),
                 path: parentPath
