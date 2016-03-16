@@ -4,6 +4,8 @@ let fs = require("fs");
 let Path = require("path");
 let constant = require("./constant");
 
+let mediaDirectoryName = "Media";
+let cacheDirectoryName = "MediaCache";
 let config = {
     port: 3000,
     secret: "efVideoTube",
@@ -13,10 +15,10 @@ let config = {
         db: "efvt"
     },
     media: new Map(),
-    mediaDirectoryName: "Media",
-    cacheDirectoryName: "MediaCache",
-    mediaPath: "",
-    cachePath: "",
+    mediaDirectoryName: mediaDirectoryName,
+    cacheDirectoryName: cacheDirectoryName,
+    mediaPath: Path.join(process.cwd(), mediaDirectoryName),
+    cachePath: Path.join(process.cwd(), cacheDirectoryName),
     splittableExts: [".mp4", ".webm"]
 };
 
@@ -30,9 +32,6 @@ config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight
 config.media.forEach((players) => {
     players.push(constant.players.none);
 });
-
-config.mediaPath = Path.join(process.cwd(), config.mediaDirectoryName);
-config.cachePath = Path.join(process.cwd(), config.cacheDirectoryName);
 
 fs.mkdir(config.mediaPath, (e) => { });
 fs.mkdir(config.cachePath, (e) => { });
