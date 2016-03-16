@@ -34,7 +34,7 @@ module.exports = {
         helper.setParent(webModel, relativePath);
         for (let i of itemNames) {
             let isDir = (yield fs.statAsync(Path.join(absolutePath, i))).isDirectory();
-            let ext = Path.extname(i);
+            let ext = Path.extname(i).toLowerCase();
             if (isDir || (_.includes(Object.keys(setting.media), ext) && setting.media[ext] !== constant.players.none)) {
                 let collection = isDir ? webModel.dirs : webModel.files;
                 collection.push({
