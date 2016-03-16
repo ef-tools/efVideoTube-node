@@ -10,7 +10,8 @@ module.exports = {
         index: "/index",
         play: "/play",
         audio: "/play/audio",
-        subtitle: "/play/subtitle"
+        subtitle: "/play/subtitle",
+        playlist: "/play/playlist"
     },
     players: {
         none: "none",

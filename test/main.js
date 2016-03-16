@@ -10,3 +10,4 @@ require("./server/web-app");
 require("./server/settings");
 require("./server/index");
 require("./server/play");
+require("./server/playlist");
