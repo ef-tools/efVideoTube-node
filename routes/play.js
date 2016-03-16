@@ -10,10 +10,13 @@ let constant = require("../constant");
 
 bluebird.promisifyAll(fs);
 
+
+
 module.exports = {
     get: function* () {
         let relativePath = this.query.path || "";
-        if (!config.media.has(Path.extname(relativePath))) {
+        let ext = Path.extname(relativePath);
+        if (!config.media.has(ext)) {
             this.status = 400;
             return;
         }
@@ -25,12 +28,28 @@ module.exports = {
             return;
         }
 
-        let webModel = {
-            name: Path.basename(relativePath),
-            video: helper.getMediaUrl(relativePath),
-            subtitles: [],
-            parent: null
-        };
+        let setting = yield Setting.findByUserName(this.claims.userName);
+        setting = Setting.injectDefaults(setting);
+
+        let webModel;
+        if (config.getMediaType(ext) === constant.types.video) {
+            webModel = {
+                type: constant.types.video,
+                player: setting.media[ext],
+                name: Path.basename(relativePath),
+                video: helper.getMediaUrl(relativePath),
+                subtitles: [],
+                parent: null
+            };
+        } else {
+            webModel = {
+                type: constant.types.audio,
+                player: setting.media[ext],
+                name: Path.basename(relativePath),
+                audio: helper.getMediaUrl(relativePath),
+                parent: null
+            };
+        }
         helper.setParent(webModel, relativePath);
         this.body = webModel;
     }

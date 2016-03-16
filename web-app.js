@@ -27,7 +27,7 @@ app.use(routerPublic.routes());
 // catch all middleware, only land here
 // if no other routing rules match
 app.use(function* () {
-    this.status = 401;
+    this.status = 404;
     // or redirect etc
     // this.redirect('/someotherspot');
 });

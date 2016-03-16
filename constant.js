@@ -1,5 +1,9 @@
 module.exports = {
     mediaDirectoryName: "Media",
+    types: {
+        video: "v",
+        audio: "a"
+    },
     urls: {
         signin: "/signin",
         settings: "/settings",

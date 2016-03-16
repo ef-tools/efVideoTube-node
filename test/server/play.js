@@ -47,13 +47,93 @@ describe("Test /play api", function () {
         yield agent.get(constant.urls.play).query({ path: "not exist.mp4" }).expect(404).end();
     });
 
-    it("should get play info for media", function* () {
+    it("should get play info for mp4", function* () {
         let path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.h5video,
             name: Path.basename(path),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
             subtitles: [],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get play info for webm", function* () {
+        let path = Path.join("Video", "ACG", "Blue_Sky_Azure_girl.webm");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.h5video,
+            name: Path.basename(path),
+            video: "/Media/Video/ACG/Blue_Sky_Azure_girl.webm",
+            subtitles: [],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get play info for wmv", function* () {
+        let path = Path.join("Video", "Coding", "dotNet", "Jason Dolinger MVVM.wmv");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.silverlight,
+            name: Path.basename(path),
+            video: "/Media/Video/Coding/dotNet/Jason Dolinger MVVM.wmv",
+            subtitles: [],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get play info for flv", function* () {
+        let path = Path.join("Video", "ACG", "デジャブ·ザ·ファイヤー.flv");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.video,
+            player: constant.players.flash,
+            name: Path.basename(path),
+            video: "/Media/Video/ACG/デジャブ·ザ·ファイヤー.flv",
+            subtitles: [],
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get play info for m4a", function* () {
+        let path = Path.join("Music", "ACG", "100もの扉.m4a");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.audio,
+            player: constant.players.h5audio,
+            name: Path.basename(path),
+            audio: "/Media/Music/ACG/100もの扉.m4a",
+            parent: {
+                name: Path.basename(parentPath),
+                path: parentPath
+            }
+        }).end();
+    });
+
+    it("should get play info for mp3", function* () {
+        let path = Path.join("AudioBook", "For a New Liberty", "Introduction Llewellyn H Rockwell Jr.mp3");
+        let parentPath = Path.dirname(path);
+        yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
+            type: constant.types.audio,
+            player: constant.players.h5audio,
+            name: Path.basename(path),
+            audio: "/Media/AudioBook/For a New Liberty/Introduction Llewellyn H Rockwell Jr.mp3",
             parent: {
                 name: Path.basename(parentPath),
                 path: parentPath

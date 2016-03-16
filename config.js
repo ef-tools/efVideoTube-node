@@ -1,9 +1,25 @@
 'use strict'
+let util = require("util");
 let fs = require("fs");
 let Path = require("path");
 let constant = require("./constant");
 
-let config = {
+let mediaPlayers = new Map();
+// first player will be set as the default
+mediaPlayers.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
+mediaPlayers.set(".webm", [constant.players.h5video]);
+mediaPlayers.set(".wmv", [constant.players.silverlight]);
+mediaPlayers.set(".flv", [constant.players.flash]);
+mediaPlayers.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
+mediaPlayers.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
+mediaPlayers.forEach((players) => {
+    players.push(constant.players.none);
+});
+
+let mediaPath = Path.join(process.cwd(), constant.mediaDirectoryName);
+fs.mkdir(mediaPath, (e) => { });
+
+module.exports = {
     port: 3000,
     secret: "efVideoTube",
     rethinkdb: {
@@ -11,21 +27,20 @@ let config = {
         port: 28015,
         db: "efvt"
     },
-    media: new Map(),
-    mediaPath: Path.join(process.cwd(), constant.mediaDirectoryName)
+    media: mediaPlayers,
+    mediaPath: mediaPath,
+    getMediaType: function (ext) {
+        switch (ext.toLowerCase()) {
+            case ".mp4":
+            case ".webm":
+            case ".wmv":
+            case ".flv":
+                return constant.types.video;
+            case ".m4a":
+            case ".mp3":
+                return constant.types.audio;
+            default:
+                throw new Error(util.format("Invalid extension name: %s", ext));
+        }
+    }
 };
-
-// first player will be set as the default
-config.media.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
-config.media.set(".webm", [constant.players.h5video]);
-config.media.set(".wmv", [constant.players.silverlight]);
-config.media.set(".flv", [constant.players.flash]);
-config.media.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
-config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
-config.media.forEach((players) => {
-    players.push(constant.players.none);
-});
-
-fs.mkdir(config.mediaPath, (e) => { });
-
-module.exports = config;

@@ -134,6 +134,10 @@ let media = {
                 "Rails for Zombies Lv.4.mp4": "",
                 "Rails for Zombies Lv.5.mp4": ""
             },
+            "dotNet": {
+                "Jason Dolinger MVVM.wmv": "",
+                "VS2012CodeReview_Source.wmv": ""
+            },
             "Google_I_O_2010_The_world_of_ListView.webm": "",
             "Google_I_O_2010_The_world_of_ListView.srt": ""
         },
