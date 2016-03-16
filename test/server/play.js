@@ -144,17 +144,17 @@ describe("Test /play api", function () {
     });
 
     it("should get ass subtitles", function* () {
-        let path = Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.mp4");
+        let path = Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.mp4");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
             type: constant.types.video,
             player: constant.players.h5video,
             name: Path.basename(path),
-            video: "/Media/Video/Anime/[P.A.WORKS]/Hanasaku_Iroha_01.mp4",
+            video: "/Media/Video/Anime/[P.A.WORKS]/Hanasaku_Iroha/Hanasaku_Iroha_01.mp4",
             audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.chs.ass")),
-                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha_01.jpn.ass"))
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.chs.ass")),
+                "/play/subtitle?path=" + encodeURIComponent(Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.jpn.ass"))
             ],
             parent: {
                 name: Path.basename(parentPath),
