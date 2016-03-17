@@ -20,47 +20,52 @@ module.exports = {
             return;
         }
         let absolutePath = Path.join(config.mediaPath, relativePath);
+        let itemNames;
         try {
             yield fs.statAsync(absolutePath);
+            itemNames = yield fs.readdirAsync(Path.dirname(absolutePath));
         } catch (e) {
             this.status = 404;
             return;
         }
         let setting = yield Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
-        
-        let files = yield fs.readdirAsync(Path.dirname(absolutePath));
-        let nameWithoutExt = Path.basename(relativePath, ext);
-        let partner = new RegExp(`${nameWithoutExt}.*$`, "i");
-        let subtitles = files.filter(f => partner.test(f) && _.includes(config.subtitleExts, Path.extname(f)));
-        let defaultSub = null;
-        let subModels = subtitles.map(function(s) {
-            let subtitleLang = config.subtitleLangs.get(Path.extname(Path.basename(s, Path.extname(s))).toLowerCase());
-            if (!defaultSub || subtitleLang.order < defaultSub.order) {
-                defaultSub = { srclang: subtitleLang.lang, order: subtitleLang.order };
-            }
-            return {
-                src:  util.format("%s?path=%s", constant.urls.subtitle, encodeURIComponent(Path.join(Path.dirname(relativePath), s))),
-                srclang: subtitleLang.lang,
-                label: subtitleLang.label,
-                default: false,
-            }
-        });
-        if (subModels.length > 0) subModels.find((m) => m.srclang == defaultSub.srclang).default = true;
 
         let webModel;
         if (helper.getMediaType(ext) === constant.types.video) {
+            let parentRelativePath = Path.dirname(relativePath);
+            let nameWithoutExt = Path.basename(relativePath, ext);
+            let pattern = new RegExp(util.format("^%s.+?(%s)$", nameWithoutExt, config.subtitleExts.join("|")), "i");
+            let langSubtitles = new Map();
+            for (let itemName of itemNames) {
+                let itemRelativePath = Path.join(parentRelativePath, itemName);
+                if (!(yield fs.statAsync(Path.join(config.mediaPath, itemRelativePath))).isDirectory() && pattern.test(itemName)) {
+                    let lang = helper.parseLang(itemName);
+                    if (!langSubtitles.has(lang))
+                        langSubtitles.set(lang, []);
+                    langSubtitles.get(lang).push({
+                        src: util.format("%s?path=%s", constant.urls.subtitle, encodeURIComponent(itemRelativePath)),
+                        srclang: lang.srcLang,
+                        label: lang.label
+                    });
+                }
+            }
+
             webModel = {
                 type: constant.types.video,
                 player: setting.media[ext],
                 name: Path.basename(relativePath),
                 video: helper.getMediaUrl(relativePath),
-                subtitles: subModels,
+                subtitles: _.flatMap(langSubtitles, function (v) {
+                    return v;
+                }),
                 parent: null
             };
             if (helper.canExtract(ext))
                 webModel.audio = util.format("%s?path=%s",
                     constant.urls.audio, encodeURIComponent(relativePath));
+            if (webModel.subtitles.length)
+                webModel.subtitles[0].default = true;
         } else {
             webModel = {
                 type: constant.types.audio,

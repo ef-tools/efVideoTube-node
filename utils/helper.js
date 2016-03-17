@@ -34,5 +34,13 @@ module.exports = {
                 name: Path.basename(parentPath),
                 path: parentPath
             };
+    },
+    parseLang: function (fileName) {
+        let fileNameWithoutExt = Path.basename(fileName, Path.extname(fileName));
+        for (let langExt of config.subtitleLangs.keys()) {
+            if (fileNameWithoutExt.toLowerCase().endsWith(langExt))
+                return config.subtitleLangs.get(langExt);
+        }
+        return config.langs[0];
     }
 };

@@ -6,6 +6,10 @@ let constant = require("./constant");
 
 let mediaDirectoryName = "Media";
 let cacheDirectoryName = "MediaCache";
+let sc = { srcLang: "zh-hans", label: "中文(简体)" };
+let tc = { srcLang: "zh-hant", label: "中文(繁體)" };
+let jp = { srcLang: "ja", label: "日本語" };
+let en = { srcLang: "en", label: "English" };
 let config = {
     port: 3000,
     secret: "efVideoTube",
@@ -20,6 +24,7 @@ let config = {
     mediaPath: Path.join(process.cwd(), mediaDirectoryName),
     cachePath: Path.join(process.cwd(), cacheDirectoryName),
     splittableExts: [".mp4", ".webm"],
+    langs: [sc, tc, jp, en],
     subtitleExts: [".srt", ".ass", ".ssa"],
     subtitleLangs: new Map()
 };
@@ -35,14 +40,14 @@ config.media.forEach((players) => {
     players.push(constant.players.none);
 });
 
-config.subtitleLangs.set(".sc", { lang: "zh-hans", label: "中文(简体)", order: 0 });
-config.subtitleLangs.set(".chs", { lang: "zh-hans", label: "中文(简体)", order: 0 });
-config.subtitleLangs.set(".tc", { lang: "zh-hant", label: "中文(繁體)", order: 1 });
-config.subtitleLangs.set(".cht", { lang: "zh-hant", label: "中文(繁體)", order: 1 });
-config.subtitleLangs.set(".jp", { lang: "ja", label: "日本語", order: 2 });
-config.subtitleLangs.set(".jpn", { lang: "ja", label: "日本語", order: 2 });
-config.subtitleLangs.set(".en", { lang: "en", label: "English", order: 3 });
-config.subtitleLangs.set(".eng", { lang: "en", label: "English", order: 3 });
+config.subtitleLangs.set(".sc", sc);
+config.subtitleLangs.set(".chs", sc);
+config.subtitleLangs.set(".tc", tc);
+config.subtitleLangs.set(".cht", tc);
+config.subtitleLangs.set(".jp", jp);
+config.subtitleLangs.set(".jpn", jp);
+config.subtitleLangs.set(".en", en);
+config.subtitleLangs.set(".eng", en);
 
 fs.mkdir(config.mediaPath, (e) => { });
 fs.mkdir(config.cachePath, (e) => { });
