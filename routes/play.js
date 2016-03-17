@@ -50,13 +50,16 @@ module.exports = {
                     });
                 }
             }
+            
+            let sortedlangSubtitles = _.sortBy(Array.from(langSubtitles.keys()), l => config.langs.indexOf(l))
+                                       .map(l => langSubtitles.get(l));
 
             webModel = {
                 type: constant.types.video,
                 player: setting.media[ext],
                 name: Path.basename(relativePath),
                 video: helper.getMediaUrl(relativePath),
-                subtitles: _.flatMap(langSubtitles, function (v) {
+                subtitles: _.flatMap(sortedlangSubtitles, function (v) {
                     return v;
                 }),
                 parent: null
