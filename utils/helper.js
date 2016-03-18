@@ -13,7 +13,7 @@ module.exports = {
         return util.format("/%s/%s", config.cacheDirectoryName, relativePath.split("\\").join("/"));
     },
     hasAudio: function (ext) {
-        return config.media.get(ext).type === constant.types.audio || this.canExtract(ext);
+        return config.media.get(ext).type === constant.types.audio || config.demuxers.has(ext);
     },
     setParent: function (webModel, relativePath) {
         let parentPath = Path.dirname(relativePath);
