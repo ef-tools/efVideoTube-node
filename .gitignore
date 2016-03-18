@@ -2,4 +2,5 @@
 .dt/
 node_modules/
 Media/
+MediaCache/
 .migrate

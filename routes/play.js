@@ -13,29 +13,26 @@ let constant = require("../constant");
 bluebird.promisifyAll(fs);
 bluebird.promisifyAll(childProcess);
 
-let parsePathes = function* (validExts) {
-    let relativePath = this.query.path || "";
+let parsePathes = function* (ctx, validExts) {
+    let relativePath = ctx.query.path || "";
     let ext = Path.extname(relativePath).toLowerCase();
     let isExtValid = false;
-    switch (typeof validExts) {
-        case "Map":
-            isExtValid = validExts.has(ext);
-            break;
-        case "Array":
-            isExtValid = _.includes(validExts, ext);
-            break;
-        default:
-            this.throw(500);
-    }
+    if (validExts instanceof Map)
+        isExtValid = validExts.has(ext);
+    else if (validExts instanceof Array)
+        isExtValid = _.includes(validExts, ext);
+    else
+        ctx.throw(500);
+
     if (!isExtValid)
-        this.throw(400);
+        ctx.throw(400);
     let absolutePath = Path.join(config.mediaPath, relativePath);
     try {
         let stat = yield fs.statAsync(absolutePath);
         if (stat.isDirectory())
-            this.throw(507);
+            ctx.throw(507);
     } catch (e) {
-        this.throw(404);
+        ctx.throw(404);
     }
     return [relativePath, ext, absolutePath];
 };
@@ -61,25 +58,25 @@ let getLangSubtitleMaps = function* (relativePath, ext, itemNames) {
     return langSubtitles;
 };
 
-let redirectToCache = function* (relativePath, absolutePath, demuxer) {
+let redirectToCache = function* (ctx, relativePath, absolutePath, demuxer) {
     let cacheRelativePath = relativePath + demuxer.outputExt;
     let cacheAbsolutePath = Path.join(config.cachePath, cacheRelativePath);
     let exists = true;
     try {
         let stat = yield fs.statAsync(cacheAbsolutePath);
         if (stat.isDirectory())
-            this.throw(507);
+            ctx.throw(507);
     } catch (e) {
         exists = false;
     }
     if (!exists)
         yield childProcess.execFileAsync(demuxer.exec, demuxer.getArgs(absolutePath, cacheAbsolutePath));
-    this.redirect(helper.getMediaCacheUrl(cacheRelativePath));
+    ctx.redirect(helper.getMediaCacheUrl(cacheRelativePath));
 }
 
 module.exports = {
     get: function* () {
-        let pathes = yield parsePathes(config.media);
+        let pathes = yield parsePathes(this, config.media);
         let relativePath = pathes[0];
         let ext = pathes[1];
         let absolutePath = pathes[2];
@@ -108,18 +105,18 @@ module.exports = {
         this.body = webModel;
     },
     audio: function* () {
-        let pathes = yield parsePathes(config.demuxers);
+        let pathes = yield parsePathes(this, config.demuxers);
         let relativePath = pathes[0];
         let ext = pathes[1];
         let absolutePath = pathes[2];
 
-        yield redirectToCache(relativePath, absolutePath, config.demuxers.get(ext));
+        yield redirectToCache(this, relativePath, absolutePath, config.demuxers.get(ext));
     },
     subtitle: function* () {
-        let pathes = yield parsePathes(config.subtitleExts);
+        let pathes = yield parsePathes(this, config.subtitleExts);
         let relativePath = pathes[0];
         let absolutePath = pathes[2];
 
-        yield redirectToCache(relativePath, absolutePath, config.subtitleConv);
+        yield redirectToCache(this, relativePath, absolutePath, config.subtitleConv);
     }
 };

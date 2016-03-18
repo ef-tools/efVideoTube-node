@@ -43,17 +43,17 @@ config.media.forEach(extConfig => {
 config.demuxers.set(".mp4", {
     outputExt: ".m4a",
     exec: "D:\\Sync\\Software\\efMediaConverter\\enc\\mp4box\\mp4box.exe",
-    getArgs: function (input, output) { return `-add "${input}"#audio -new "${output}"`; }
+    getArgs: function (input, output) { return ["-add", input + "#audio", "-new", output]; }
 });
 config.demuxers.set(".webm", {
-    outputExt: ".webm",
+    outputExt: ".weba",
     exec: "D:\\Sync\\Software\\efMediaConverter\\enc\\mkvtoolnix\\mkvmerge.exe",
-    getArgs: function (input, output) { return `-o "${output}" -a 1 -D -S -T --no-global-tags --no-chapters "${input}"`; }
+    getArgs: function (input, output) { return ["-o", output, "-a", "1", "-D", "-S", "-T", "--no-global-tags", "--no-chapters", input]; }
 });
 config.subtitleConv = {
     outputExt: ".vtt",
     exec: "D:\\Sync\\Software\\efMediaConverter\\enc\\efTools\\ass2srt.exe",
-    getArgs: function (input, output) { return `-i "${input}" -o "${output}" -f -vtt`; }
+    getArgs: function (input, output) { return ["-i", input, "-o", output, "-f", "-vtt"]; }
 };
 
 config.subtitleLangs.set(".sc", sc);
