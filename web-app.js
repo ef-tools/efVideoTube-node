@@ -25,7 +25,6 @@ router.get(constant.urls.audio, routePlay.audio);
 router.get(constant.urls.subtitle, routePlay.subtitle);
 
 routerPublic.get("/", routeHome.get);
-routerPublic.get(constant.urls.signin, routeSignIn.get);
 routerPublic.post(constant.urls.signin, routeSignIn.post);
 
 appStatic.use(checkAuth);

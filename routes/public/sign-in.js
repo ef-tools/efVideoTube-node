@@ -6,9 +6,6 @@ let User = require("../../models/user");
 let config = require("../../config");
 
 module.exports = {
-    get: function* () {
-        this.body = "sign in page";
-    },
     post: function* () {
         let body = yield parse(this);
         let user = yield* User.findByUserName(body.userName);
@@ -19,6 +16,6 @@ module.exports = {
             };
         }
         else
-            this.throw(401, "Invalid user credentials.");
+            this.throw(400, "Invalid user credentials.");
     }
 };

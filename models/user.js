@@ -39,7 +39,7 @@ User.deleteByUserName = function* (userName) {
 User.prototype.hashPassword = function* () {
     if (this.plainPassword) {
         this.plainPassword = false;
-        this.password = yield saltedHash(this.password);
+        this.password = yield* saltedHash(this.password);
     }
 };
 
