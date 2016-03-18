@@ -27,7 +27,6 @@ module.exports = {
         let webModel = {
             name: Path.basename(relativePath),
             path: relativePath,
-            parent: null,
             dirs: [],
             files: []
         };
@@ -44,7 +43,7 @@ module.exports = {
                 let ext = Path.extname(i).toLowerCase();
                 if (config.media.has(ext) && setting.media[ext] !== constant.players.none) {
                     let types = [];
-                    if (helper.getMediaType(ext) === constant.types.video)
+                    if (config.media.get(ext).type === constant.types.video)
                         types.push(constant.types.video);
                     if (helper.hasAudio(ext))
                         types.push(constant.types.audio);

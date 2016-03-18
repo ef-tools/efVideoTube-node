@@ -49,9 +49,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "ACG", "secret base ～君がくれたもの～.mp4");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.h5video,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/ACG/secret base ～君がくれたもの～.mp4",
             audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [],
@@ -66,9 +65,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "ACG", "Blue_Sky_Azure_girl.webm");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.h5video,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/ACG/Blue_Sky_Azure_girl.webm",
             audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [],
@@ -83,9 +81,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "Coding", "dotNet", "Jason Dolinger MVVM.wmv");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.silverlight,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/Coding/dotNet/Jason Dolinger MVVM.wmv",
             subtitles: [],
             parent: {
@@ -99,9 +96,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "ACG", "デジャブ·ザ·ファイヤー.flv");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.flash,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/ACG/デジャブ·ザ·ファイヤー.flv",
             subtitles: [],
             parent: {
@@ -115,9 +111,8 @@ describe("Test /play api", function () {
         let path = Path.join("Music", "ACG", "100もの扉.m4a");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.audio,
             player: constant.players.h5audio,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             audio: "/Media/Music/ACG/100もの扉.m4a",
             parent: {
                 name: Path.basename(parentPath),
@@ -130,9 +125,8 @@ describe("Test /play api", function () {
         let path = Path.join("AudioBook", "For a New Liberty", "Introduction Llewellyn H Rockwell Jr.mp3");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.audio,
             player: constant.players.h5audio,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             audio: "/Media/AudioBook/For a New Liberty/Introduction Llewellyn H Rockwell Jr.mp3",
             parent: {
                 name: Path.basename(parentPath),
@@ -145,9 +139,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "Anime", "[P.A.WORKS]", "Hanasaku_Iroha", "Hanasaku_Iroha_01.mp4");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.h5video,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/Anime/[P.A.WORKS]/Hanasaku_Iroha/Hanasaku_Iroha_01.mp4",
             audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [{
@@ -171,9 +164,8 @@ describe("Test /play api", function () {
         let path = Path.join("Video", "Economics", "Why the Meltdown Should Have Surprised No One _ Peter Schiff.webm");
         let parentPath = Path.dirname(path);
         yield agent.get(constant.urls.play).query({ path: path }).expect(200, {
-            type: constant.types.video,
             player: constant.players.h5video,
-            name: Path.basename(path),
+            name: Path.basename(path, Path.extname(path)),
             video: "/Media/Video/Economics/Why the Meltdown Should Have Surprised No One _ Peter Schiff.webm",
             audio: "/play/audio?path=" + encodeURIComponent(path),
             subtitles: [{

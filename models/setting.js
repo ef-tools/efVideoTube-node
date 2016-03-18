@@ -15,9 +15,9 @@ let Setting = function (properties) {
 Setting.injectDefaults = function (setting) {
     if (!setting)
         setting = { media: {} };
-    config.media.forEach((players, ext) => {
-        if (!_.includes(players, setting.media[ext]))
-            setting.media[ext] = players[0];
+    config.media.forEach((extConfig, ext) => {
+        if (!_.includes(extConfig.players, setting.media[ext]))
+            setting.media[ext] = extConfig.players[0];
     });
     return setting;
 };
@@ -39,7 +39,7 @@ Setting.deleteByUserName = function* (userName) {
 Setting.prototype.save = function* () {
     this.media = _.pick(this.media, Array.from(config.media.keys()));
     for (let ext of Object.keys(this.media)) {
-        if (!_.includes(config.media.get(ext), this.media[ext]))
+        if (!_.includes(config.media.get(ext).players, this.media[ext]))
             delete this.media[ext];
     }
 

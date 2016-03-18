@@ -9,23 +9,11 @@ module.exports = {
     getMediaUrl: function (path) {
         return util.format("/%s/%s", config.mediaDirectoryName, path.split("\\").join("/"));
     },
-    getMediaType: function (ext) {
-        switch (ext) {
-            case ".mp4":
-            case ".webm":
-            case ".wmv":
-            case ".flv":
-                return constant.types.video;
-            case ".m4a":
-            case ".mp3":
-                return constant.types.audio;
-        }
-    },
     canExtract: function (ext) {
         return _.includes(config.splittableExts, ext);
     },
     hasAudio: function (ext) {
-        return this.getMediaType(ext) == constant.types.audio || this.canExtract(ext);
+        return config.media.get(ext).type === constant.types.audio || this.canExtract(ext);
     },
     setParent: function (webModel, relativePath) {
         let parentPath = Path.dirname(relativePath);

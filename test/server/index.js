@@ -70,8 +70,6 @@ describe("Test /index api", function () {
                     assert(result.body.parent);
                     assert.equalCaseInsensitive(result.body.parent.name, Path.basename(itemData.parent));
                     assert.equalCaseInsensitive(result.body.parent.path, itemData.parent);
-                } else {
-                    assert.strictEqual(result.body.parent, null);
                 }
                 assert.deepStrictEqual(result.body.dirs, dirNames.map(d => {
                     return { name: d, path: Path.join(itemData.path, d) };
@@ -79,7 +77,7 @@ describe("Test /index api", function () {
                 assert.deepStrictEqual(result.body.files, fileNames.map(f => {
                     let types = [];
                     let ext = Path.extname(f);
-                    if (helper.getMediaType(ext) === constant.types.video)
+                    if (config.media.get(ext).type === constant.types.video)
                         types.push(constant.types.video);
                     if (helper.hasAudio(ext))
                         types.push(constant.types.audio);

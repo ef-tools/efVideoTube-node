@@ -30,14 +30,14 @@ let config = {
 };
 
 // first player will be set as the default
-config.media.set(".mp4", [constant.players.h5video, constant.players.silverlight, constant.players.flash]);
-config.media.set(".webm", [constant.players.h5video]);
-config.media.set(".wmv", [constant.players.silverlight]);
-config.media.set(".flv", [constant.players.flash]);
-config.media.set(".m4a", [constant.players.h5audio, constant.players.silverlight]);
-config.media.set(".mp3", [constant.players.h5audio, constant.players.silverlight]);
-config.media.forEach((players) => {
-    players.push(constant.players.none);
+config.media.set(".mp4", { type: constant.types.video, players: [constant.players.h5video, constant.players.silverlight, constant.players.flash] });
+config.media.set(".webm", { type: constant.types.video, players: [constant.players.h5video] });
+config.media.set(".wmv", { type: constant.types.video, players: [constant.players.silverlight] });
+config.media.set(".flv", { type: constant.types.video, players: [constant.players.flash] });
+config.media.set(".m4a", { type: constant.types.audio, players: [constant.players.h5audio, constant.players.silverlight] });
+config.media.set(".mp3", { type: constant.types.audio, players: [constant.players.h5audio, constant.players.silverlight] });
+config.media.forEach(extConfig => {
+    extConfig.players.push(constant.players.none);
 });
 
 config.subtitleLangs.set(".sc", sc);

@@ -1,7 +1,7 @@
 module.exports = {
     types: {
-        video: "v",
-        audio: "a"
+        video: "video",
+        audio: "audio"
     },
     urls: {
         signin: "/signin",

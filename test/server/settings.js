@@ -39,8 +39,8 @@ describe("Test /settings api", function () {
         assert(media);
         assert.deepStrictEqual(Object.keys(media), Array.from(config.media.keys()));
         for (let ext of Object.keys(media)) {
-            assert.strictEqual(media[ext].active, config.media.get(ext)[0]);
-            assert.deepStrictEqual(media[ext].players, config.media.get(ext));
+            assert.strictEqual(media[ext].active, config.media.get(ext).players[0]);
+            assert.deepStrictEqual(media[ext].players, config.media.get(ext).players);
         }
     });
 
@@ -61,8 +61,8 @@ describe("Test /settings api", function () {
         assert(media);
         assert.deepStrictEqual(Object.keys(media), Array.from(config.media.keys()));
         for (let ext of Object.keys(media)) {
-            assert.strictEqual(media[ext].active, ext in validSettings.media ? validSettings.media[ext] : config.media.get(ext)[0]);
-            assert.deepStrictEqual(media[ext].players, config.media.get(ext));
+            assert.strictEqual(media[ext].active, ext in validSettings.media ? validSettings.media[ext] : config.media.get(ext).players[0]);
+            assert.deepStrictEqual(media[ext].players, config.media.get(ext).players);
         }
     });
 });
