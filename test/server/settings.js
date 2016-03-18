@@ -6,7 +6,7 @@ let _ = require("lodash");
 let webApp = require("../../web-app");
 let User = require("../../models/user");
 let Setting = require("../../models/setting");
-let agentFactory = require("../../utils/agent-factory");
+let agentFactory = require("../agent-factory");
 let config = require("../../config");
 let constant = require("../../constant");
 

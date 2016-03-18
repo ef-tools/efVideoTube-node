@@ -7,7 +7,7 @@ let constant = require("../constant");
 
 module.exports = {
     get: function* () {
-        let setting = yield Setting.findByUserName(this.claims.userName);
+        let setting = yield* Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
         let media = {};
         config.media.forEach((extConfig, ext) => {
@@ -20,7 +20,7 @@ module.exports = {
     },
     post: function* () {
         let body = yield parse(this);
-        let setting = yield Setting.findByUserName(this.claims.userName);
+        let setting = yield* Setting.findByUserName(this.claims.userName);
         if (setting === null)
             setting = new Setting({ userName: this.claims.userName });
         setting.media = body.media;

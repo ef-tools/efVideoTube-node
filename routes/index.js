@@ -20,7 +20,7 @@ module.exports = {
         } catch (e) {
             this.throw(404);
         }
-        let setting = yield Setting.findByUserName(this.claims.userName);
+        let setting = yield* Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
 
         let webModel = {

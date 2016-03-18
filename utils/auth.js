@@ -13,5 +13,5 @@ module.exports = function* (next) {
             } catch (err) { }
         }
     }
-    yield next;
+    yield* next;
 };

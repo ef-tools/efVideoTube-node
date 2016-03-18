@@ -76,12 +76,12 @@ let redirectToCache = function* (ctx, relativePath, absolutePath, demuxer) {
 
 module.exports = {
     get: function* () {
-        let pathes = yield parsePathes(this, config.media);
+        let pathes = yield* parsePathes(this, config.media);
         let relativePath = pathes[0];
         let ext = pathes[1];
         let absolutePath = pathes[2];
 
-        let setting = yield Setting.findByUserName(this.claims.userName);
+        let setting = yield* Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
 
         let mediaType = config.media.get(ext).type;
@@ -92,7 +92,7 @@ module.exports = {
         webModel[mediaType] = helper.getMediaUrl(relativePath);
         helper.setParent(webModel, relativePath);
         if (mediaType === constant.types.video) {
-            let langSubMap = yield getLangSubtitleMaps(relativePath, ext, yield fs.readdirAsync(Path.dirname(absolutePath)));
+            let langSubMap = yield* getLangSubtitleMaps(relativePath, ext, yield fs.readdirAsync(Path.dirname(absolutePath)));
             webModel.subtitles = _.flatMap(config.langs, v => {
                 return langSubMap.has(v) ? langSubMap.get(v) : [];
             });
@@ -105,18 +105,18 @@ module.exports = {
         this.body = webModel;
     },
     audio: function* () {
-        let pathes = yield parsePathes(this, config.demuxers);
+        let pathes = yield* parsePathes(this, config.demuxers);
         let relativePath = pathes[0];
         let ext = pathes[1];
         let absolutePath = pathes[2];
 
-        yield redirectToCache(this, relativePath, absolutePath, config.demuxers.get(ext));
+        yield* redirectToCache(this, relativePath, absolutePath, config.demuxers.get(ext));
     },
     subtitle: function* () {
-        let pathes = yield parsePathes(this, config.subtitleExts);
+        let pathes = yield* parsePathes(this, config.subtitleExts);
         let relativePath = pathes[0];
         let absolutePath = pathes[2];
 
-        yield redirectToCache(this, relativePath, absolutePath, config.subtitleConv);
+        yield* redirectToCache(this, relativePath, absolutePath, config.subtitleConv);
     }
 };

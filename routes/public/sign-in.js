@@ -11,8 +11,8 @@ module.exports = {
     },
     post: function* () {
         let body = yield parse(this);
-        let user = yield User.findByUserName(body.userName);
-        if (user && (yield user.validate(body.password))) {
+        let user = yield* User.findByUserName(body.userName);
+        if (user && (yield* user.validate(body.password))) {
             let claims = _.pick(user, ["id", "userName"]);
             this.body = {
                 token: jwt.sign(claims, config.secret)
