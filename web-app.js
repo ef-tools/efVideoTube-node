@@ -1,5 +1,8 @@
 'use strict'
 let app = require("koa")();
+let appStatic = require("koa")();
+let mount = require("koa-mount");
+let serve = require("koa-static");
 let router = require("koa-router")();
 let routerPublic = require("koa-router")();
 let auth = require("./utils/auth");
@@ -9,6 +12,7 @@ let routeSettings = require("./routes/settings");
 let routePlay = require("./routes/play");
 let routeHome = require("./routes/public/home");
 let routeSignIn = require("./routes/public/sign-in");
+let config = require("./config");
 let constant = require("./constant");
 
 router.use(checkAuth);
@@ -23,9 +27,15 @@ routerPublic.get("/", routeHome.get);
 routerPublic.get(constant.urls.signin, routeSignIn.get);
 routerPublic.post(constant.urls.signin, routeSignIn.post);
 
+appStatic.use(checkAuth);
+appStatic.use(serve(config.mediaDirectoryName));
+appStatic.use(serve(config.cacheDirectoryName));
+
 app.use(auth);
 app.use(router.routes());
 app.use(routerPublic.routes());
+app.use(mount("/" + config.mediaDirectoryName, appStatic));
+app.use(mount("/" + config.cacheDirectoryName, appStatic));
 
 // catch all middleware, only land here
 // if no other routing rules match
