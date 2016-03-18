@@ -33,8 +33,8 @@ appStatic.use(serve(config.cacheDirectoryName));
 
 app.use(cors);
 app.use(auth);
-app.use(router.routes());
-app.use(routerPublic.routes());
+app.use(router.routes()).use(router.allowedMethods());
+app.use(routerPublic.routes()).use(routerPublic.allowedMethods());
 app.use(mount("/" + config.mediaDirectoryName, appStatic));
 app.use(mount("/" + config.cacheDirectoryName, appStatic));
 
