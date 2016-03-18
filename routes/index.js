@@ -18,8 +18,7 @@ module.exports = {
         try {
             itemNames = yield fs.readdirAsync(absolutePath);
         } catch (e) {
-            this.status = 404;
-            return;
+            this.throw(404);
         }
         let setting = yield Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);

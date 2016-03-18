@@ -16,6 +16,8 @@ router.get(constant.urls.index, routeIndex.get);
 router.get(constant.urls.settings, routeSettings.get);
 router.post(constant.urls.settings, routeSettings.post);
 router.get(constant.urls.play, routePlay.get);
+router.get(constant.urls.audio, routePlay.audio);
+router.get(constant.urls.subtitle, routePlay.subtitle);
 
 routerPublic.get("/", routeHome.get);
 routerPublic.get(constant.urls.signin, routeSignIn.get);

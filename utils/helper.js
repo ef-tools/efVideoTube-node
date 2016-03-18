@@ -6,11 +6,11 @@ let config = require("../config");
 let constant = require("../constant");
 
 module.exports = {
-    getMediaUrl: function (path) {
-        return util.format("/%s/%s", config.mediaDirectoryName, path.split("\\").join("/"));
+    getMediaUrl: function (relativePath) {
+        return util.format("/%s/%s", config.mediaDirectoryName, relativePath.split("\\").join("/"));
     },
-    canExtract: function (ext) {
-        return _.includes(config.splittableExts, ext);
+    getMediaCacheUrl: function (relativePath) {
+        return util.format("/%s/%s", config.cacheDirectoryName, relativePath.split("\\").join("/"));
     },
     hasAudio: function (ext) {
         return config.media.get(ext).type === constant.types.audio || this.canExtract(ext);
