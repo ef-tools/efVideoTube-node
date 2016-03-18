@@ -6,6 +6,7 @@ let serve = require("koa-static");
 let router = require("koa-router")();
 let routerPublic = require("koa-router")();
 let auth = require("./utils/auth");
+let cors = require("./utils/cors");
 let checkAuth = require("./utils/check-auth");
 let routeIndex = require("./routes/index");
 let routeSettings = require("./routes/settings");
@@ -31,6 +32,7 @@ appStatic.use(checkAuth);
 appStatic.use(serve(config.mediaDirectoryName));
 appStatic.use(serve(config.cacheDirectoryName));
 
+app.use(cors);
 app.use(auth);
 app.use(router.routes());
 app.use(routerPublic.routes());
