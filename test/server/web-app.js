@@ -32,7 +32,7 @@ describe("Test server routes", function () {
         });
 
         it("should get 401 with incorrect credential", function* () {
-            yield agent.post(constant.urls.signin).send({ userName: userName, password: "wrong" }).expect(401).end();
+            yield agent.post(constant.urls.signin).send({ userName: userName, password: "wrong" }).expect(400).end();
         });
 
         it("should get token with correct credential", function* () {
