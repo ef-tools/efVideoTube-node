@@ -1,7 +1,7 @@
 'use strict'
 let _ = require("lodash");
 let bcrypt = require("co-bcryptjs");
-let r = require("../utils/rethinkdb")();
+let r = require("../utils/rethinkdb");
 
 const SCHEMA = ["userName", "password"];
 

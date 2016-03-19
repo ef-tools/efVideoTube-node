@@ -1,6 +1,6 @@
 'use strict'
 let _ = require("lodash");
-let r = require("../utils/rethinkdb")();
+let r = require("../utils/rethinkdb");
 let config = require("../config");
 let constant = require("../constant");
 

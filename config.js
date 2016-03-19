@@ -16,7 +16,8 @@ let config = {
     rethinkdb: {
         host: "localhost",
         port: 28015,
-        db: "efvt"
+        db: "efvt",
+        silent: true
     },
     media: new Map(),
     demuxers: new Map(),

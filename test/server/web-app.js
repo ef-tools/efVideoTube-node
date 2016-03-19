@@ -27,10 +27,6 @@ describe("Test server routes", function () {
             yield User.delete(user);
         });
 
-        it("should get /signin page", function* () {
-            yield agent.get(constant.urls.signin).expect(200).end();
-        });
-
         it("should get 401 on /settings before signed in", function* () {
             yield agent.get(constant.urls.settings).expect(401).end();
         });
