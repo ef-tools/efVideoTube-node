@@ -21,7 +21,7 @@ describe("Test server routes", function () {
 
         before(function* () {
             user = new User({ userName: userName, password: password });
-            yield user.save();
+            yield* user.save();
         });
         after(function* () {
             yield User.delete(user);

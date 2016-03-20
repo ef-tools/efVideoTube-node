@@ -20,7 +20,7 @@ describe("Test /play api", function () {
         let userName = "erich_test";
         let password = "pwdpwd";
         user = new User({ userName: userName, password: password });
-        yield user.save();
+        yield* user.save();
 
         agent = agentFactory(server);
         let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
@@ -29,7 +29,7 @@ describe("Test /play api", function () {
         mockFs(mock.fs);
     });
     after(function* () {
-        yield User.deleteByUserName(user.userName);
+        yield* User.deleteByUserName(user.userName);
         mockFs.restore();
     });
 

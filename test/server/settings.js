@@ -18,15 +18,15 @@ describe("Test /settings api", function () {
         let userName = "erich_test";
         let password = "pwdpwd";
         user = new User({ userName: userName, password: password });
-        yield user.save();
+        yield* user.save();
 
         agent = agentFactory(server);
         let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
         agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);
     });
     after(function* () {
-        yield User.deleteByUserName(user.userName);
-        yield Setting.deleteByUserName(user.userName);
+        yield* User.deleteByUserName(user.userName);
+        yield* Setting.deleteByUserName(user.userName);
     });
 
     it("should get 401 without token", function* () {

@@ -76,11 +76,7 @@ let redirectToCache = function* (ctx, relativePath, absolutePath, demuxer) {
 
 module.exports = {
     get: function* () {
-        let pathes = yield* parsePathes(this, config.media);
-        let relativePath = pathes[0];
-        let ext = pathes[1];
-        let absolutePath = pathes[2];
-
+        let [relativePath, ext, absolutePath] = yield* parsePathes(this, config.media);
         let setting = yield* Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
 
@@ -105,18 +101,11 @@ module.exports = {
         this.body = webModel;
     },
     audio: function* () {
-        let pathes = yield* parsePathes(this, config.demuxers);
-        let relativePath = pathes[0];
-        let ext = pathes[1];
-        let absolutePath = pathes[2];
-
+        let [relativePath, ext, absolutePath] = yield* parsePathes(this, config.demuxers);
         yield* redirectToCache(this, relativePath, absolutePath, config.demuxers.get(ext));
     },
     subtitle: function* () {
-        let pathes = yield* parsePathes(this, config.subtitleExts);
-        let relativePath = pathes[0];
-        let absolutePath = pathes[2];
-
+        let [relativePath, ext, absolutePath] = yield* parsePathes(this, config.subtitleExts);
         yield* redirectToCache(this, relativePath, absolutePath, config.subtitleConv);
     }
 };

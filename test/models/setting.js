@@ -9,7 +9,7 @@ describe("Test setting model", function() {
     let customMedia = { ".mp4": constant.players.h5video };
 
     afterEach(function* () {
-        yield Setting.deleteByUserName(userName);
+        yield* Setting.deleteByUserName(userName);
     });
 
     it("should create a setting", function* () {
@@ -25,14 +25,14 @@ describe("Test setting model", function() {
 
     it("should have id after being saved to db", function* () {
         let setting = new Setting({ userName: userName, media: customMedia });
-        yield setting.save();
+        yield* setting.save();
         assert(setting.id);
     });
 
     it("should find a saved setting by userName", function* () {
         let setting = new Setting({ userName: userName, media: customMedia });
-        yield setting.save();
-        let dbSetting = yield Setting.findByUserName(userName);
+        yield* setting.save();
+        let dbSetting = yield* Setting.findByUserName(userName);
         assert(dbSetting instanceof Setting);
         assert.strictEqual(dbSetting.userName, userName);
         assert.deepStrictEqual(dbSetting.media, customMedia);
@@ -40,15 +40,15 @@ describe("Test setting model", function() {
 
     it("should not save with empty media", function* () {
         let setting = new Setting({ userName: userName });
-        yield setting.save();
+        yield* setting.save();
         assert.strictEqual(typeof setting.id, "undefined");
 
         setting.media = {};
-        yield setting.save();
+        yield* setting.save();
         assert.strictEqual(typeof setting.id, "undefined");
 
         setting.media = { p: "whatever" };
-        yield setting.save();
+        yield* setting.save();
         assert.strictEqual(typeof setting.id, "undefined");
     });
 
@@ -60,11 +60,11 @@ describe("Test setting model", function() {
                 ".wmv": constant.players.silverlight
             }
         });
-        yield setting.save();
+        yield* setting.save();
         assert.strictEqual(Object.keys(setting.media).length, 1);
         assert(".wmv" in setting.media);
 
-        let dbSetting = yield Setting.findByUserName(userName);
+        let dbSetting = yield* Setting.findByUserName(userName);
         assert.deepStrictEqual(dbSetting, setting);
     });
 
@@ -77,19 +77,19 @@ describe("Test setting model", function() {
                 ".flv": constant.players.h5video
             }
         });
-        yield setting.save();
+        yield* setting.save();
         assert.strictEqual(Object.keys(setting.media).length, 1);
         assert(".mp4" in setting.media);
 
-        let dbSetting = yield Setting.findByUserName(userName);
+        let dbSetting = yield* Setting.findByUserName(userName);
         assert.deepStrictEqual(dbSetting, setting);
     });
 
     it("should delete a setting", function* () {
         let setting = new Setting({ userName: userName, media: customMedia });
-        yield setting.save();
-        yield Setting.deleteByUserName(userName);
-        let dbSetting = yield Setting.findByUserName(userName);
+        yield* setting.save();
+        yield* Setting.deleteByUserName(userName);
+        let dbSetting = yield* Setting.findByUserName(userName);
         assert.strictEqual(dbSetting, null);
     });
 });

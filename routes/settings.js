@@ -10,12 +10,12 @@ module.exports = {
         let setting = yield* Setting.findByUserName(this.claims.userName);
         setting = Setting.injectDefaults(setting);
         let media = {};
-        config.media.forEach((extConfig, ext) => {
+        for (let [ext, extConfig] of config.media) {
             media[ext] = {
                 active: setting.media[ext],
                 players: extConfig.players
             };
-        });
+        }
         this.body = { media: media };
     },
     post: function* () {

@@ -37,9 +37,9 @@ config.media.set(".wmv", { type: constant.types.video, players: [constant.player
 config.media.set(".flv", { type: constant.types.video, players: [constant.players.flash] });
 config.media.set(".m4a", { type: constant.types.audio, players: [constant.players.h5audio, constant.players.silverlight] });
 config.media.set(".mp3", { type: constant.types.audio, players: [constant.players.h5audio, constant.players.silverlight] });
-config.media.forEach(extConfig => {
+for (let extConfig of config.media.values()) {
     extConfig.players.push(constant.players.none);
-});
+}
 
 config.demuxers.set(".mp4", {
     outputExt: ".m4a",
