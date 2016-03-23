@@ -8,3 +8,4 @@ before_install:
   - sudo apt-get install rethinkdb
 before_script:
     - rethinkdb --daemon
+    - npm run migrate
