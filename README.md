@@ -48,7 +48,7 @@ Unlike the original C# version, which uses client certificates to authenticate u
 ## External Dependencies
 
 The website depends on following external applications to make specific function work.
-The pathes of these applications could be configured under `web.config`.
+The pathes of these applications could be configured under `config.js`.
 
 - `mp4box`
 
