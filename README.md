@@ -11,13 +11,13 @@ The client (UI) part of the project is under developing and will be available so
 
 ## Renew
 
-For a few years ago, I developed [efVideoTube (C#)](https://github.com/ef-tools/efVideoTube-cs) for sharing videos among my friends.
-As the time goes, I feel some drawbacks of the program, such as inflexible of authentication, unoptimized UI on cell phones, etc.
-So I decide to renew the project.
+A few years ago, I developed [efVideoTube (C#)](https://github.com/ef-tools/efVideoTube-cs) for sharing videos among my friends.
+As the time goes, I feel some drawbacks of the program, such as inflexibility of authentication, unoptimized UI on cell phones, etc.
+So I decided to renew the project.
 
 The new project is changed from the architecture, it ditches B/S for SOA.
 It composites a web service and clients on different platforms.
-Unlike the original C# version, which uses client certificates to authenticate users, this version of efVideoTube uses database to validate user accounts so that it supports all devices.
+Unlike the original C# version, which uses client certificates to authenticate users, the new version uses database to validate user accounts so that it no longer relays on client side support.
 
 
 ## Features
@@ -63,7 +63,7 @@ The pathes of these applications could be configured under `web.config`.
 - `ass2srt`
 
     For converting `.ass`, `.ssa` and `.srt` subtitles to webvtt.
-    *Will be published to github soon.*
+    *Will be published to github later.*
 
 
 ## License
