@@ -11,9 +11,10 @@ before_install:
   - sudo apt-get install rethinkdb
 before_script:
   - rethinkdb --daemon
-  - npm run migrate
 script:
   - export NODE_ENV=travis-redis
   - npm test
+  
   - export NODE_ENV=travis-rethinkdb
+  - npm run migrate
   - npm test

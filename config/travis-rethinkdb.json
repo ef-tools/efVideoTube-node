@@ -1,5 +1,5 @@
 {
-    "dbType": "redis",
+    "dbType": "rethinkdb",
     "rethinkdb": {
         "host": "localhost"
     }
