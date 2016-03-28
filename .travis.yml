@@ -10,5 +10,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install rethinkdb
 before_script:
-    - rethinkdb --daemon
-    - npm run migrate
+  - rethinkdb --daemon
+  - npm run migrate
+script:
+  - npm run test-all
