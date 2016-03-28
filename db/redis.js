@@ -5,9 +5,9 @@ let config = require("../config");
 let client = redis.createClient(config.redis.port, config.redis.host, { database: config.redis.db });
 
 module.exports = {
-    find: function* (tableName, key) {
+    findByUserName: function* (tableName, userName) {
         let model = null;
-        let id = getKey(tableName, key);
+        let id = getKey(tableName, userName);
         let res = yield client.get(id);
         if (res !== null) {
             model = JSON.parse(res);
@@ -15,8 +15,8 @@ module.exports = {
         }
         return model;
     },
-    remove: function* (tableName, key) {
-        let id = getKey(tableName, key);
+    deleteByUserName: function* (tableName, userName) {
+        let id = getKey(tableName, userName);
         yield client.del(id);
     },
     save: function* (tableName, model, modelValues) {

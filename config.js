@@ -13,7 +13,7 @@ let en = { srcLang: "en", label: "English" };
 let config = {
     port: 3000,
     secret: "efVideoTube",
-    db: "redis",
+    db: constant.db.redis,
     redis: {
         host: "localhost",
         port: 6379,

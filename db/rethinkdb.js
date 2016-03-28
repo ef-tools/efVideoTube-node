@@ -3,19 +3,18 @@ let rethinkdb = require("rethinkdbdash");
 let config = require("../config");
 
 let r = rethinkdb(config.rethinkdb);
-const INDEX = "userName";
 
 module.exports = {
-    find: function* (tableName, key) {
+    find: function* (tableName, index, value) {
         let model = null;
-        let result = yield r.table(tableName).getAll(key, { index: INDEX });
+        let result = yield r.table(tableName).getAll(value, { index: index });
         if (result && result.length) {
             model = result[0];
         }
         return model;
     },
-    remove: function* (tableName, key) {
-        yield r.table(tableName).getAll(key, { index: INDEX }).delete();
+    remove: function* (tableName, index, value) {
+        yield r.table(tableName).getAll(value, { index: index }).delete();
     },
     save: function* (tableName, model, modelValues) {
         if (model.id) {

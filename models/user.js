@@ -17,7 +17,7 @@ let User = function (properties) {
 };
 
 User.findByUserName = function* (userName) {
-    let user = yield* db.find(TABLE_NAME, userName);
+    let user = yield* db.findByUserName(TABLE_NAME, userName);
     if (user) {
         Object.setPrototypeOf(user, User.prototype);
     }
@@ -25,7 +25,7 @@ User.findByUserName = function* (userName) {
 };
 
 User.deleteByUserName = function* (userName) {
-    yield* db.remove(TABLE_NAME, userName);
+    yield* db.deleteByUserName(TABLE_NAME, userName);
 };
 
 User.prototype.validate = function* (password) {

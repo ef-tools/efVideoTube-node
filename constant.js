@@ -1,4 +1,8 @@
 module.exports = {
+    db: {
+        redis: "redis",
+        rethinkdb: "rethinkdb"
+    },
     types: {
         video: "video",
         audio: "audio"

@@ -22,7 +22,7 @@ Setting.injectDefaults = function (setting) {
 };
 
 Setting.findByUserName = function* (userName) {
-    let setting = yield* db.find(TABLE_NAME, userName);
+    let setting = yield* db.findByUserName(TABLE_NAME, userName);
     if (setting) {
         Object.setPrototypeOf(setting, Setting.prototype);
     }
@@ -30,7 +30,7 @@ Setting.findByUserName = function* (userName) {
 };
 
 Setting.deleteByUserName = function* (userName) {
-    yield* db.remove(TABLE_NAME, userName);
+    yield* db.deleteByUserName(TABLE_NAME, userName);
 };
 
 Setting.prototype.save = function* () {
