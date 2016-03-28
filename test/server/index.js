@@ -1,7 +1,6 @@
 'use strict'
 require("co-mocha");
 let assert = require("assert");
-let util = require("util");
 let Path = require("path");
 let _ = require("lodash");
 let mockFs = require('mock-fs');
@@ -26,7 +25,7 @@ describe("Test /index api", function () {
 
         agent = agentFactory(server);
         let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
-        agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);
+        agent.headers["Authorization"] = `Bearer ${result.body.token}`;
 
         mockFs(mock.fs);
     });
@@ -62,7 +61,7 @@ describe("Test /index api", function () {
             dirNames.forEach(d => { nodes.push(item[d]); });
 
             let itemData = mock.mediaData.get(item);
-            it("should get index of " + (itemData.path || "ROOT"), function* () {
+            it(`should get index of ${itemData.path || "ROOT"}`, function* () {
                 let result = yield agent.get(constant.urls.index).query({ dir: itemData.path }).expect(200).end();
                 assert.equalCaseInsensitive(result.body.name, itemData.name);
                 assert.equalCaseInsensitive(result.body.path, itemData.path);

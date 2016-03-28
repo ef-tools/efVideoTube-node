@@ -1,28 +1,26 @@
 'use strict'
-let util = require("util");
 let fs = require("fs");
 let Path = require("path");
+let c = require("config");
 let constant = require("./constant");
 
-let mediaDirectoryName = "Media";
-let cacheDirectoryName = "MediaCache";
 let sc = { srcLang: "zh-hans", label: "中文(简体)" };
 let tc = { srcLang: "zh-hant", label: "中文(繁體)" };
 let jp = { srcLang: "ja", label: "日本語" };
 let en = { srcLang: "en", label: "English" };
 let config = {
-    port: 3000,
-    secret: "efVideoTube",
-    db: constant.db.redis,
+    port: c.get("port"),
+    secret: c.get("secret"),
+    dbType: c.get("dbType"),
     redis: {
-        host: "localhost",
-        port: 6379,
-        db: 0
+        host: c.get("redis.host"),
+        port: c.get("redis.port"),
+        db: c.get("redis.db")
     },
     rethinkdb: {
-        host: "localhost",
-        port: 28015,
-        db: "efvt",
+        host: c.get("rethinkdb.host"),
+        port: c.get("rethinkdb.port"),
+        db: c.get("rethinkdb.db"),
         silent: false
     },
     media: new Map(),
@@ -30,10 +28,10 @@ let config = {
     subtitleLangs: new Map(),
     subtitleExts: [".ass", ".ssa", ".srt"],
     langs: [sc, tc, jp, en],
-    mediaDirectoryName: mediaDirectoryName,
-    cacheDirectoryName: cacheDirectoryName,
-    mediaPath: Path.join(process.cwd(), mediaDirectoryName),
-    cachePath: Path.join(process.cwd(), cacheDirectoryName),
+    mediaDirectoryName: c.get("mediaDirectoryName"),
+    cacheDirectoryName: c.get("cacheDirectoryName"),
+    mediaPath: Path.join(process.cwd(), c.get("mediaDirectoryName")),
+    cachePath: Path.join(process.cwd(), c.get("cacheDirectoryName")),
 };
 
 // first player will be set as the default

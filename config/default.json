@@ -1,0 +1,17 @@
+{
+    "port": 3000,
+    "secret": "efVideoTube",
+    "dbType": "redis",
+    "redis": {
+        "host": "debian",
+        "port": 6379,
+        "db": 0
+    },
+    "rethinkdb": {
+        "host": "localhost",
+        "port": 28015,
+        "db": "efvt"
+    },
+    "mediaDirectoryName": "Media",
+    "cacheDirectoryName": "MediaCache"
+}

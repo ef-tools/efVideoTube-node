@@ -7,9 +7,7 @@ assert.equalCaseInsensitive = function (actual, expected) {
     assert.strictEqual(actual.toLowerCase(), expected.toLowerCase());
 };
 
-let db = require("optimist").argv.db || constant.db.redis;
-describe("Test on " + db, function () {
-    config.db = db;
+describe(`Test on ${config.dbType}`, function () {
     require("./models/user");
     require("./models/setting");
     require("./server/web-app");

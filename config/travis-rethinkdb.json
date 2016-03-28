@@ -1,0 +1,6 @@
+{
+    "dbType": "redis",
+    "rethinkdb": {
+        "host": "localhost"
+    }
+}

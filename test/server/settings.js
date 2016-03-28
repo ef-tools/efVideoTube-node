@@ -1,7 +1,6 @@
 'use strict'
 require("co-mocha");
 let assert = require("assert");
-let util = require("util");
 let _ = require("lodash");
 let webApp = require("../../web-app");
 let User = require("../../models/user");
@@ -22,7 +21,7 @@ describe("Test /settings api", function () {
 
         agent = agentFactory(server);
         let result = yield agent.post(constant.urls.signin).send({ userName: userName, password: password }).expect(200).end()
-        agent.headers["Authorization"] = util.format("Bearer %s", result.body.token);
+        agent.headers["Authorization"] = `Bearer ${result.body.token}`;
     });
     after(function* () {
         yield* User.deleteByUserName(user.userName);

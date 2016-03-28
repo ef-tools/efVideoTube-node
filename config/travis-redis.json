@@ -1,0 +1,6 @@
+{
+    "dbType": "redis",
+    "redis": {
+        "host": "localhost"
+    }
+}

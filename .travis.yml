@@ -13,4 +13,7 @@ before_script:
   - rethinkdb --daemon
   - npm run migrate
 script:
-  - npm run test-all
+  - export NODE_ENV=travis-redis
+  - npm test
+  - export NODE_ENV=travis-rethinkdb
+  - npm test
