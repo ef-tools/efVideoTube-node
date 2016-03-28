@@ -15,7 +15,7 @@ let config = {
     secret: "efVideoTube",
     db: "redis",
     redis: {
-        host: "debian",
+        host: "localhost",
         port: 6379,
         db: 0
     },
