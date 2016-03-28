@@ -24,7 +24,7 @@ describe("Test server routes", function () {
             yield* user.save();
         });
         after(function* () {
-            yield User.delete(user);
+            yield User.deleteByUserName(userName);
         });
 
         it("should get 401 on /settings before signed in", function* () {

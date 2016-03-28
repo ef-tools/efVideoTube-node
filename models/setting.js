@@ -4,9 +4,8 @@ let r = require("../utils/rethinkdb");
 let config = require("../config");
 let constant = require("../constant");
 
+const TABLE_NAME = "settings";
 const SCHEMA = ["userName", "media"];
-
-let table = r.table("settings");
 
 let Setting = function (properties) {
     _.assign(this, properties);
@@ -23,17 +22,15 @@ Setting.injectDefaults = function (setting) {
 };
 
 Setting.findByUserName = function* (userName) {
-    let setting = null;
-    let result = yield table.getAll(userName, { index: "userName" });
-    if (result && result.length) {
-        setting = result[0];
+    let setting = yield* r.find(TABLE_NAME, userName, "userName");
+    if (setting) {
         Object.setPrototypeOf(setting, Setting.prototype);
     }
     return setting;
 };
 
 Setting.deleteByUserName = function* (userName) {
-    yield table.getAll(userName, { index: "userName" }).delete();
+    yield* r.remove(TABLE_NAME, userName, "userName");
 };
 
 Setting.prototype.save = function* () {
@@ -44,17 +41,7 @@ Setting.prototype.save = function* () {
     }
 
     if (Object.keys(this.media).length) {
-        let model = _.pick(this, SCHEMA);
-        let result;
-        if (this.id) {
-            result = yield table.get(this.id).update(model);
-        }
-        else {
-            result = yield table.insert(model);
-            if (result && result.inserted) {
-                this.id = result.generated_keys[0];
-            }
-        }
+        yield* r.save(TABLE_NAME, this, SCHEMA);
     }
 };
 
