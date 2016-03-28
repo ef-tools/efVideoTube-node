@@ -1,6 +1,6 @@
 'use strict'
 let _ = require("lodash");
-let r = require("../utils/rethinkdb");
+let db = require("../db/db-adapter");
 let config = require("../config");
 let constant = require("../constant");
 
@@ -22,7 +22,7 @@ Setting.injectDefaults = function (setting) {
 };
 
 Setting.findByUserName = function* (userName) {
-    let setting = yield* r.find(TABLE_NAME, userName, "userName");
+    let setting = yield* db.find(TABLE_NAME, userName, "userName");
     if (setting) {
         Object.setPrototypeOf(setting, Setting.prototype);
     }
@@ -30,7 +30,7 @@ Setting.findByUserName = function* (userName) {
 };
 
 Setting.deleteByUserName = function* (userName) {
-    yield* r.remove(TABLE_NAME, userName, "userName");
+    yield* db.remove(TABLE_NAME, userName, "userName");
 };
 
 Setting.prototype.save = function* () {
@@ -41,7 +41,7 @@ Setting.prototype.save = function* () {
     }
 
     if (Object.keys(this.media).length) {
-        yield* r.save(TABLE_NAME, this, SCHEMA);
+        yield* db.save(TABLE_NAME, this, SCHEMA);
     }
 };
 

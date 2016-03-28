@@ -1,5 +1,5 @@
 'use strict'
-var r = require("../utils/rethinkdb")();
+var r = require("../db/rethinkdb").r;
 
 exports.up = function(next) {
     r.tableCreate("users").run(next);

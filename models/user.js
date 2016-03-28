@@ -1,7 +1,7 @@
 'use strict'
 let _ = require("lodash");
 let bcrypt = require("co-bcryptjs");
-let r = require("../utils/rethinkdb");
+let db = require("../db/db-adapter");
 
 const TABLE_NAME = "users";
 const SCHEMA = ["userName", "password"];
@@ -17,7 +17,7 @@ let User = function (properties) {
 };
 
 User.findByUserName = function* (userName) {
-    let user = yield* r.find(TABLE_NAME, userName, "userName");
+    let user = yield* db.find(TABLE_NAME, userName, "userName");
     if (user) {
         Object.setPrototypeOf(user, User.prototype);
     }
@@ -25,7 +25,7 @@ User.findByUserName = function* (userName) {
 };
 
 User.deleteByUserName = function* (userName) {
-    yield* r.remove(TABLE_NAME, userName, "userName");
+    yield* db.remove(TABLE_NAME, userName, "userName");
 };
 
 User.prototype.hashPassword = function* () {
@@ -44,7 +44,7 @@ User.prototype.validate = function* (password) {
 
 User.prototype.save = function* () {
     yield this.hashPassword();
-    yield* r.save(TABLE_NAME, this, SCHEMA);
+    yield* db.save(TABLE_NAME, this, SCHEMA);
 };
 
 module.exports = User;

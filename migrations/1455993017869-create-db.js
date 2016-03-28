@@ -1,5 +1,5 @@
 'use strict'
-var r = require("../utils/rethinkdb")();
+var r = require("../db/rethinkdb").r;
 var config = require("../config");
 
 exports.up = function(next) {

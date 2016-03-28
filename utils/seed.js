@@ -1,7 +1,7 @@
 'use strict'
 let util = require("util");
 let co = require("co");
-let r = require("./rethinkdb");
+let db = require("../db/db-adapter");
 let User = require("../models/user");
 
 function* createUser(userName, password) {
@@ -20,8 +20,8 @@ function* createUser(userName, password) {
 
 let args = process.argv.slice(2);
 co(createUser(args[0], args[1])).then(function () {
-    r.getPoolMaster().drain();
+    db.close();
 }, function (err) {
     console.error(err.stack);
-    r.getPoolMaster().drain();
+    db.close();
 });

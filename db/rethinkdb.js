@@ -6,6 +6,7 @@ let config = require("../config");
 let r = rethinkdb(config.rethinkdb);
 
 module.exports = {
+    r: r,
     find: function* (tableName, value, indexName) {
         let model = null;
         let result = yield r.table(tableName).getAll(value, { index: indexName });
@@ -29,5 +30,8 @@ module.exports = {
                 model.id = result.generated_keys[0];
             }
         }
+    },
+    close: function () {
+        r.getPoolMaster().drain();
     }
 };

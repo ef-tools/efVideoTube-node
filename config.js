@@ -13,6 +13,10 @@ let en = { srcLang: "en", label: "English" };
 let config = {
     port: 3000,
     secret: "efVideoTube",
+    db: "rethinkdb",
+    redis: {
+        
+    },
     rethinkdb: {
         host: "localhost",
         port: 28015,
