@@ -21,7 +21,7 @@
     "seed": "node utils/seed.js",
     "start": "node --harmony_destructuring server.js",
     "debug": "node --harmony_destructuring --debug-brk --nolazy server.js",
-    "test": "./node_modules/.bin/mocha --harmony_destructuring",
+    "test": "./node_modules/.bin/mocha test --harmony_destructuring --config=redis && mocha test --harmony_destructuring --config=rethinkdb",
     "test-debug": "./node_modules/.bin/mocha --harmony_destructuring --debug-brk"
   },
   "repository": {
@@ -48,6 +48,7 @@
     "co-supertest": "0.0.10",
     "mocha": "^2.4.5",
     "mock-fs": "^3.8.0",
+    "optimist": "^0.6.1",
     "supertest": "^1.2.0"
   }
 }
