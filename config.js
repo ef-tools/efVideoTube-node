@@ -13,15 +13,17 @@ let en = { srcLang: "en", label: "English" };
 let config = {
     port: 3000,
     secret: "efVideoTube",
-    db: "rethinkdb",
+    db: "redis",
     redis: {
-        
+        host: "debian",
+        port: 6379,
+        db: 0
     },
     rethinkdb: {
         host: "localhost",
         port: 28015,
         db: "efvt",
-        silent: true
+        silent: false
     },
     media: new Map(),
     demuxers: new Map(),

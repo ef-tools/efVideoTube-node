@@ -1,37 +1,35 @@
 'use strict'
-let _ = require("lodash");
 let rethinkdb = require("rethinkdbdash");
 let config = require("../config");
 
 let r = rethinkdb(config.rethinkdb);
+const INDEX = "userName";
 
 module.exports = {
-    r: r,
-    find: function* (tableName, value, indexName) {
+    find: function* (tableName, key) {
         let model = null;
-        let result = yield r.table(tableName).getAll(value, { index: indexName });
+        let result = yield r.table(tableName).getAll(key, { index: INDEX });
         if (result && result.length) {
             model = result[0];
         }
         return model;
     },
-    remove: function* (tableName, value, indexName) {
-        yield r.table(tableName).getAll(value, { index: indexName }).delete();
+    remove: function* (tableName, key) {
+        yield r.table(tableName).getAll(key, { index: INDEX }).delete();
     },
-    save: function* (tableName, model, schema) {
-        let modelValues = _.pick(model, schema);
-        let result;
+    save: function* (tableName, model, modelValues) {
         if (model.id) {
-            result = yield r.table(tableName).get(model.id).update(modelValues);
+            yield r.table(tableName).get(model.id).update(modelValues);
         }
         else {
-            result = yield r.table(tableName).insert(modelValues);
+            let result = yield r.table(tableName).insert(modelValues);
             if (result && result.inserted) {
                 model.id = result.generated_keys[0];
             }
         }
     },
-    close: function () {
+    close: function* () {
         r.getPoolMaster().drain();
-    }
+    },
+    r: r
 };

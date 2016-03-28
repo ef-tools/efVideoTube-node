@@ -17,7 +17,7 @@ let User = function (properties) {
 };
 
 User.findByUserName = function* (userName) {
-    let user = yield* db.find(TABLE_NAME, userName, "userName");
+    let user = yield* db.find(TABLE_NAME, userName);
     if (user) {
         Object.setPrototypeOf(user, User.prototype);
     }
@@ -25,14 +25,7 @@ User.findByUserName = function* (userName) {
 };
 
 User.deleteByUserName = function* (userName) {
-    yield* db.remove(TABLE_NAME, userName, "userName");
-};
-
-User.prototype.hashPassword = function* () {
-    if (this.plainPassword) {
-        this.plainPassword = false;
-        this.password = yield* saltedHash(this.password);
-    }
+    yield* db.remove(TABLE_NAME, userName);
 };
 
 User.prototype.validate = function* (password) {
@@ -43,7 +36,10 @@ User.prototype.validate = function* (password) {
 };
 
 User.prototype.save = function* () {
-    yield this.hashPassword();
+    if (this.plainPassword) {
+        this.password = yield* saltedHash(this.password);
+        this.plainPassword = false;
+    }
     yield* db.save(TABLE_NAME, this, SCHEMA);
 };
 
