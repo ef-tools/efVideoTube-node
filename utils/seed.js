@@ -4,9 +4,8 @@ let co = require("co");
 let db = require("../db/db-adapter");
 let User = require("../models/user");
 
-
 let args = process.argv.slice(2);
-co(function* (){
+co(function* () {
     yield* createUser(args[0], args[1]);
     yield* db.close();
 }).catch(function (err) {

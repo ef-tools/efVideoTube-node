@@ -1,5 +1,4 @@
 'use strict'
-let co = require("co");
 let redis = require('thunk-redis');
 let config = require("../config");
 
