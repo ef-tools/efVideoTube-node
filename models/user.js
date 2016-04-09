@@ -1,7 +1,7 @@
 'use strict'
 let _ = require("lodash");
 let bcrypt = require("co-bcryptjs");
-let db = require("../db/db-adapter");
+let db = require("../db/db-proxy");
 
 const TABLE_NAME = "users";
 const SCHEMA = ["userName", "password"];

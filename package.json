@@ -22,7 +22,8 @@
     "start": "node --harmony_destructuring server.js",
     "debug": "node --harmony_destructuring --debug-brk --nolazy server.js",
     "test": "./node_modules/.bin/mocha --harmony_destructuring",
-    "test-debug": "./node_modules/.bin/mocha --harmony_destructuring --debug-brk"
+    "test-debug": "./node_modules/.bin/mocha --harmony_destructuring --debug-brk",
+    "test-all": "cross-env NODE_ENV=redis npm test && cross-env NODE_ENV=rethinkdb npm test"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "co-mocha": "^1.1.2",
     "co-supertest": "0.0.10",
+    "cross-env": "^1.0.7",
     "mocha": "^2.4.5",
     "mock-fs": "^3.8.0",
     "optimist": "^0.6.1",

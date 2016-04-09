@@ -1,7 +1,7 @@
 'use strict'
 let util = require("util");
 let co = require("co");
-let db = require("../db/db-adapter");
+let db = require("../db/db-proxy");
 let User = require("../models/user");
 
 let args = process.argv.slice(2);

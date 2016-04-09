@@ -1,6 +1,6 @@
 'use strict'
 let _ = require("lodash");
-let db = require("../db/db-adapter");
+let db = require("../db/db-proxy");
 let config = require("../config");
 let constant = require("../constant");
 
