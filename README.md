@@ -72,6 +72,6 @@ MIT
 
 
 [travis-image]: https://img.shields.io/travis/ef-tools/efVideoTube-js.svg?style=flat-square
-[travis-url]: https://travis-ci.org/ef-tools/efVideoTube-js
+[travis-url]: https://travis-ci.org/ef-tools/efVideoTube-node
 [npm-image]: https://img.shields.io/npm/v/ef-video-tube.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/ef-video-tube

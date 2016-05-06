@@ -23,9 +23,8 @@ Setting.injectDefaults = function (setting) {
 
 Setting.findByUserName = function* (userName) {
     let setting = yield* db.findByUserName(TABLE_NAME, userName);
-    if (setting) {
+    if (setting)
         Object.setPrototypeOf(setting, Setting.prototype);
-    }
     return setting;
 };
 

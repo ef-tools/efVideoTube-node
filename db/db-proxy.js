@@ -26,7 +26,7 @@ switch (config.dbType) {
         };
         break;
     default:
-        throw new Error(`"${config.dbType}" is not supported by db adapter.`);
+        throw new Error(`"${config.dbType}" is not supported by db proxy.`);
 }
 
 module.exports = {
